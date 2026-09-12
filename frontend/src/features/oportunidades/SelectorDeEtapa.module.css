@@ -79,7 +79,7 @@
 .actual .marca {
   border-color: var(--color-etapa);
   background: var(--color-etapa);
-  color: #fff;
+  color: var(--sobre-etapa);
 }
 
 .leyenda {

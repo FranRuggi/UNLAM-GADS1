@@ -67,13 +67,13 @@
 
 /* --- Variantes ------------------------------------------------------------ */
 .primario {
-  background: var(--marca-indigo);
+  background: var(--marca-solida);
   color: #fff;
   box-shadow: var(--sombra-sm);
 }
 
 .primario:hover:not(:disabled) {
-  background: var(--marca-indigo-profundo);
+  background: var(--marca-solida-fuerte);
 }
 
 .secundario {

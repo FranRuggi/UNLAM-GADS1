@@ -17,6 +17,13 @@
   padding: var(--e-6);
 }
 
+.cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-4);
+}
+
 .cabecera a {
   text-decoration: none;
 }

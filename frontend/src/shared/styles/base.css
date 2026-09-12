@@ -37,7 +37,7 @@ body {
   font-size: var(--texto-base);
   line-height: 1.6;
   color: var(--tinta-700);
-  background: var(--papel);
+  background: var(--fondo);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-feature-settings: "cv05" 1, "ss01" 1;
@@ -150,7 +150,7 @@ hr {
   z-index: 100;
   padding: var(--e-2) var(--e-4);
   border-radius: var(--radio);
-  background: var(--marca-indigo);
+  background: var(--marca-solida);
   color: #fff;
   font-weight: 500;
   text-decoration: none;

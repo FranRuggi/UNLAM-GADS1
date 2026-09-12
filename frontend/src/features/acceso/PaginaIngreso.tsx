@@ -5,6 +5,7 @@ import { Logo } from "../../shared/components/Logo";
 import { Icono } from "../../shared/components/Icono";
 import { Boton } from "../../shared/components/Boton";
 import { Campo, Entrada } from "../../shared/components/Campos";
+import { BotonTema } from "../../shared/components/BotonTema";
 import { usuarioActual } from "../../shared/data/demo";
 import css from "./PaginaIngreso.module.css";
 
@@ -41,6 +42,7 @@ export function PaginaIngreso() {
             <Link to="/" aria-label="Ztech CRM, inicio">
               <Logo tamano={32} />
             </Link>
+            <BotonTema />
           </header>
 
           <main className={css.centro}>

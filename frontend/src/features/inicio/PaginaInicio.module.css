@@ -264,7 +264,7 @@
 /* --- Cómo funciona ---------------------------------------------------------- */
 .bloquePasos {
   padding-block: var(--e-20);
-  background: var(--marca-indigo);
+  background: var(--banda-oscura);
   color: rgba(255, 255, 255, 0.76);
 }
 

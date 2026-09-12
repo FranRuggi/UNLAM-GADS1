@@ -116,7 +116,7 @@
   inset: 0;
   z-index: 45;
   border: 0;
-  background: rgba(26, 17, 48, 0.4);
+  background: var(--velo);
 }
 
 /* --- Marco de contenido ---------------------------------------------------- */
@@ -137,7 +137,7 @@
   gap: var(--e-4);
   height: var(--barra-superior);
   padding-inline: var(--e-6);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--papel-velo);
   backdrop-filter: saturate(1.4) blur(8px);
   border-bottom: 1px solid var(--linea);
 }

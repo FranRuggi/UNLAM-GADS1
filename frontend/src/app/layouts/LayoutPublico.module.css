@@ -22,7 +22,7 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--papel-velo);
   backdrop-filter: saturate(1.4) blur(8px);
   border-bottom: 1px solid var(--linea-suave);
 }
@@ -74,6 +74,13 @@
   gap: var(--e-2);
 }
 
+/* Lo que sigue visible cuando el menú colapsa: tema y hamburguesa. */
+.accionesFijas {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+}
+
 .botonMenu {
   display: none;
   align-items: center;
@@ -94,6 +101,10 @@
 
   .botonMenu {
     display: flex;
+  }
+
+  /* Sin la navegación no queda nada que empuje el bloque contra el margen. */
+  .accionesFijas {
     margin-left: auto;
   }
 }

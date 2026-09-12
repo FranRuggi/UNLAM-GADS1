@@ -12,6 +12,34 @@
     <meta name="theme-color" content="#301854" />
     <meta name="author" content="Ztech CRM" />
 
+    <script>
+      /*
+       * Fija el tema antes del primer pintado: si se resolviera desde React
+       * habría un fogonazo claro al recargar en oscuro.
+       * La clave y los colores deben coincidir con src/shared/tema/tema.ts.
+       */
+      (function () {
+        var guardado = null;
+        try {
+          guardado = localStorage.getItem("ztech-tema");
+        } catch (e) {
+          /* almacenamiento bloqueado: se usa la preferencia del sistema */
+        }
+
+        var tema =
+          guardado === "claro" || guardado === "oscuro"
+            ? guardado
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "oscuro"
+              : "claro";
+
+        document.documentElement.dataset.tema = tema;
+
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.content = tema === "oscuro" ? "#121019" : "#301854";
+      })();
+    </script>
+
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />

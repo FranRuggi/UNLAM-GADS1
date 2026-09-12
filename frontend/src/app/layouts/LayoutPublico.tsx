@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Logo } from "../../shared/components/Logo";
 import { Icono } from "../../shared/components/Icono";
 import { BotonEnlace } from "../../shared/components/Boton";
+import { BotonTema } from "../../shared/components/BotonTema";
 import { SITIO } from "../../shared/seo/sitio";
 import { organizacion, sitioWeb } from "../../shared/seo/datosEstructurados";
 import css from "./LayoutPublico.module.css";
@@ -59,6 +60,21 @@ export function LayoutPublico() {
             ))}
           </nav>
 
+          <div className={css.accionesFijas}>
+            <BotonTema />
+
+            <button
+              type="button"
+              className={css.botonMenu}
+              aria-expanded={menuAbierto}
+              aria-controls="menu-movil"
+              aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
+              onClick={() => setMenuAbierto((v) => !v)}
+            >
+              <Icono nombre={menuAbierto ? "cerrar" : "menu"} tamano={20} />
+            </button>
+          </div>
+
           <div className={css.accionesEscritorio}>
             <BotonEnlace a="/ingresar" variante="secundario" tamano="sm">
               Iniciar sesión
@@ -67,17 +83,6 @@ export function LayoutPublico() {
               Ver la demo
             </BotonEnlace>
           </div>
-
-          <button
-            type="button"
-            className={css.botonMenu}
-            aria-expanded={menuAbierto}
-            aria-controls="menu-movil"
-            aria-label={menuAbierto ? "Cerrar menú" : "Abrir menú"}
-            onClick={() => setMenuAbierto((v) => !v)}
-          >
-            <Icono nombre={menuAbierto ? "cerrar" : "menu"} tamano={20} />
-          </button>
         </div>
 
         {menuAbierto && (

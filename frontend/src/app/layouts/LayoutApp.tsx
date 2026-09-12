@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Logo } from "../../shared/components/Logo";
 import { Icono, type NombreIcono } from "../../shared/components/Icono";
 import { Avatar } from "../../shared/components/Avatar";
+import { BotonTema } from "../../shared/components/BotonTema";
 import { usuarioActual } from "../../shared/data/demo";
 import { ROL } from "../../shared/data/formato";
 import css from "./LayoutApp.module.css";
@@ -118,6 +119,8 @@ export function LayoutApp() {
           </div>
 
           <div className={css.superiorAcciones}>
+            <BotonTema className={css.iconoAccion} />
+
             <button type="button" className={css.iconoAccion} aria-label="Notificaciones">
               <Icono nombre="campana" tamano={18} />
               <span className={css.marcador} aria-hidden="true" />
