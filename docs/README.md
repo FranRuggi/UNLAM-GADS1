@@ -13,6 +13,14 @@ Este directorio traduce las definiciones funcionales y arquitectónicas del proy
 7. [Contexto del proyecto](context/00-proyecto.md): resumen compartido, reglas y estado registrado.
 8. [Especificación del backend](specs-backend/requirements.md): requisitos, [diseño](specs-backend/design.md) y [tareas](specs-backend/tasks.md).
 9. [Guía de asistentes](asistentes.md): uso del mismo contexto con Claude, Codex y modelos sin acceso automático a archivos.
+10. [Plan de la maqueta de frontend](planificacion/plan-frontend-maqueta.md): alcance, rutas, SEO y lenguaje visual de la Entrega 1.
+11. [Bitácora del frontend](planificacion/bitacora-frontend.md): registro breve de lo ejecutado en la rama `feature/frontend`.
+12. [Registro de decisiones](decisiones/decisiones-pendientes.md): temas que deben acordarse antes de cerrar diseño o aceptación.
+13. [Decisiones del frontend](decisiones/decisiones-frontend.md): temas abiertos que surgieron al construir la maqueta.
+
+## Marca
+
+`marca/` contiene los archivos aprobados del logo en sus variantes de color, monocromo y escala de grises. Los derivados para la web (favicons, iconos de aplicación e imagen Open Graph) se generan a partir de ellos y viven en `frontend/public/`.
 
 ## Fuentes y precedencia
 

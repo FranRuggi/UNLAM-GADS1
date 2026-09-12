@@ -68,6 +68,8 @@ Los errores deben ser consistentes y no revelar datos de otro tenant. Un conflic
 
 El frontend se compila como SPA y se publica en Cloudflare Pages. El backend se construye como imagen Docker y se despliega en Render. La base es **Supabase**, accedida mediante el pooler Supavisor en modo *session*: el endpoint directo de Supabase es IPv6 y la salida de Render no lo resuelve de forma confiable.
 
+> **Desviación vigente:** la maqueta de frontend se está publicando en **Vercel**, no en Cloudflare Pages. El repositorio mantiene la configuración de ambas plataformas hasta que el equipo cierre `DF-09` en `docs/decisiones/decisiones-frontend.md`.
+
 Spring Boot Actuator expone al menos `/actuator/health`. Los logs incluyen `requestId`, `userId` y `tenantId`, sin credenciales ni datos sensibles. La configuración se suministra por variables de entorno; ningún secreto se versiona.
 
 ## Fuera de la arquitectura inicial
