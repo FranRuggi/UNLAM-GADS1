@@ -17,8 +17,8 @@ Este registro evita que decisiones funcionales o técnicas se oculten en impleme
 | DP-11 | Stack, despliegue, pantallas, calidad, equipo y año | **Parcial** — stack cerrado | 11/09 |
 | DP-12 | Incorporación y flujo de IA opcional | Diferida | Después del núcleo |
 
-Las decisiones **técnicas** del backend (DT-00..DT-22) se registran aparte, en
-`.claude/context/03-decisiones-tecnicas.md`, y las que alteran arquitectura tienen su ADR.
+Las decisiones **técnicas** del backend (DT-00..DT-24) se registran aparte, en
+`docs/context/03-decisiones-tecnicas.md`, y las que alteran arquitectura tienen su ADR.
 
 ## Prioridad inmediata
 

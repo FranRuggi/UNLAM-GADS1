@@ -7,8 +7,8 @@ persistido. Se actualiza en cada entrega — ver la sección [Estado](#estado-y-
 al final para el detalle de qué está implementado y qué no.
 
 Contexto funcional y arquitectónico completo: [`docs/`](../docs/README.md) en la raíz
-del repositorio. Decisiones técnicas del backend: [`.claude/context/`](../.claude/context/)
-y [`.claude/specs-backend/`](../.claude/specs-backend/).
+del repositorio. Decisiones técnicas del backend: [`docs/context/`](../docs/context/)
+y [`docs/specs-backend/`](../docs/specs-backend/), compartidas por todos los asistentes.
 
 ## Stack
 
@@ -158,7 +158,7 @@ Estado actual: **34 tests** (5 unitarios + 29 de integración), todos en verde.
 ## Estructura de paquetes
 
 Módulo de negocio al primer nivel, capas adentro — detalle completo en
-[`.claude/context/02-backend-convenciones.md`](../.claude/context/02-backend-convenciones.md)
+[`docs/context/02-backend-convenciones.md`](../docs/context/02-backend-convenciones.md)
 y [ADR-001](../docs/decisiones/adr/ADR-001-estructura-de-paquetes.md).
 
 ```text
@@ -186,7 +186,7 @@ com.ztech.crm/
 - Multi-tenancy (ADR-003): toda entidad de negocio filtra por el tenant del usuario
   autenticado.
 
-**Todavía no implementado** (ver `.claude/specs-backend/tasks.md` para el detalle fase
+**Todavía no implementado** (ver `docs/specs-backend/tasks.md` para el detalle fase
 por fase):
 
 - Roles y permisos por alcance (`SELLER` sólo ve lo asignado) — Fase 5/6.

@@ -84,7 +84,7 @@ backend/src/main/java/com/ztech/crm/
 ```
 
 Estado real al cierre de Entrega 1 (24/09), detalle fase por fase en
-`.claude/specs-backend/tasks.md`.
+`docs/specs-backend/tasks.md`.
 
 Las migraciones viven en `backend/src/main/resources/db/migration/` y siguen el patrón `V1__initial_schema.sql`, `V2__seed_catalogs.sql`.
 
@@ -121,7 +121,7 @@ dos estrategias — ambas contra infraestructura real, ninguna con mocks de repo
   las reglas de las entidades son chicas y quedan cubiertas indirectamente por los `*IT`.
 
 34 tests en total al cierre de Entrega 1 (5 unitarios + 29 de integración). Detalle caso
-por caso en `.claude/specs-backend/tasks.md`.
+por caso en `docs/specs-backend/tasks.md`.
 
 - Frontend: comportamiento de features con Vitest y Testing Library.
 - E2E: recorridos de entrega con Playwright.
