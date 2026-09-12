@@ -9,11 +9,12 @@ Cada `DF` indica qué se hizo provisoriamente en la maqueta, para que la decisi�
 | DF-01 | Estrategia de estilos: CSS Modules o framework de utilidades | Provisoria | 02/10 |
 | DF-02 | Iconografía propia frente a librería | Provisoria | 02/10 |
 | DF-03 | Prerenderizado de las páginas públicas | **Abierta, bloquea SEO real** | 20/09 |
-| DF-04 | Dominio definitivo y URL canónica | **Abierta, bloquea publicación** | 20/09 |
+| DF-04 | Dominio definitivo y URL canónica | Resuelta técnicamente, falta elegir dominio | 02/10 |
 | DF-05 | Destino del formulario de contacto | Abierta | 02/10 |
 | DF-06 | Validación de formularios y presentación de errores | Abierta | 02/10 |
 | DF-07 | Interacción del embudo: arrastrar o menú de etapa | Abierta | 02/10 |
 | DF-08 | Modo oscuro | Diferida | Después de la entrega final |
+| DF-09 | Hosting del frontend: Vercel frente a Cloudflare Pages | **Abierta, se desvía de la arquitectura aprobada** | 02/10 |
 
 ---
 
@@ -55,11 +56,19 @@ Cada `DF` indica qué se hizo provisoriamente en la maqueta, para que la decisi�
 
 ## DF-04 — Dominio y URL canónica
 
-**En la maqueta:** `https://ztechcrm.com.ar`, definido en `frontend/src/shared/seo/sitio.ts` y replicado en `robots.txt` y `sitemap.xml`.
+**Resuelto en lo técnico.** El dominio dejó de estar escrito a mano en tres lugares. Ahora sale de `VITE_SITE_URL`, que resuelve `vite.config.ts` y que alimenta tres cosas a la vez: la constante `SITIO.url`, el `sitemap.xml` y el `robots.txt`, ambos generados durante el build en lugar de versionarse.
 
-**El problema:** ese dominio no está registrado. Si se publica en Cloudflare Pages, la URL real va a ser del estilo `ztech-crm.pages.dev`. Una canónica que apunta a un dominio inexistente es peor que no tener canónica.
+El orden de resolución es:
 
-**A decidir:** si se registra el dominio o se usa el de Cloudflare. La constante está centralizada, pero hay que actualizar también los dos archivos de `public/`.
+1. `VITE_SITE_URL`, si está definida.
+2. `VERCEL_PROJECT_PRODUCTION_URL`, que Vercel inyecta solo en cada build.
+3. `http://localhost:5173` en desarrollo.
+
+Gracias al punto 2, un despliegue en Vercel produce canónicas y sitemap correctos aunque nadie configure nada.
+
+**Lo que falta decidir:** si el proyecto se queda con el subdominio gratuito de la plataforma o registra un dominio propio. Si se registra uno, alcanza con definir `VITE_SITE_URL` en el panel del hosting; no hay que tocar código.
+
+**Nota:** `contacto@ztechcrm.com.ar` sigue siendo una dirección ficticia del contenido, independiente de esta decisión (ver DF-05).
 
 ---
 
@@ -105,6 +114,25 @@ El componente `Campo` ya reserva el lugar del texto de ayuda; falta la variante 
 **Por qué se difirió:** duplica el trabajo de color y de verificación, y no forma parte de ninguna consigna.
 
 **Si se decide sumarlo:** los tokens ya están centralizados en `tokens.css`, así que alcanza con redefinir el bloque de color bajo `prefers-color-scheme: dark` y revisar las pantallas. No es una decisión irreversible.
+
+---
+
+## DF-09 — Hosting del frontend
+
+**La arquitectura aprobada dice Cloudflare Pages** (`docs/arquitectura/01-arquitectura-general.md`). La maqueta se está publicando en **Vercel**, así que hay una desviación explícita que el equipo tiene que confirmar o revertir.
+
+**Estado del repositorio:** conviven las dos configuraciones.
+
+- `frontend/vercel.json`: reescrituras de SPA, cabeceras de caché para `/assets/*` y cabeceras de seguridad básicas.
+- `frontend/public/_redirects`: el equivalente para Cloudflare Pages. Vercel lo ignora.
+
+Ninguna de las dos molesta a la otra, así que mantener ambas cuesta nada mientras la decisión esté abierta.
+
+**A favor de Vercel:** integración con GitHub sin configuración, previsualización por rama, y detección automática de Vite.
+
+**A favor de Cloudflare Pages:** es lo que dice el documento de arquitectura, y el backend en Render más la base en Neon ya reparten el despliegue entre varios proveedores.
+
+**A decidir:** cuál queda. Si se confirma Vercel, hay que actualizar el documento de arquitectura y borrar `_redirects`. Si se vuelve a Cloudflare, se borra `vercel.json`.
 
 ---
 

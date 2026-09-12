@@ -33,7 +33,7 @@ Registro breve de lo que se fue haciendo en la rama `feature/frontend`. Una lín
 
 - `shared/seo/Seo.tsx`: hook propio que gestiona `title`, `description`, `canonical`, `robots`, Open Graph, Twitter Card y JSON-LD por ruta.
 - `shared/seo/datosEstructurados.ts`: `Organization`, `WebSite`, `SoftwareApplication`, `BreadcrumbList` y `FAQPage`.
-- Assets estáticos: `robots.txt`, `sitemap.xml` con las cinco URL públicas, `site.webmanifest` y `_redirects` para el fallback de SPA en Cloudflare Pages.
+- Assets: `site.webmanifest`, favicons y `_redirects` para el fallback de SPA en Cloudflare Pages. `robots.txt` y `sitemap.xml` arrancaron estáticos y pasaron a generarse en el build (ver preparación del despliegue).
 
 **Contenido**
 
@@ -69,7 +69,16 @@ Registro breve de lo que se fue haciendo en la rama `feature/frontend`. Una lín
 - Contadores en singular: "1 cambio registrado" en lugar de "1 cambios registrados".
 - La columna de actividad del panel era mucho más alta que la otra; acotada con scroll propio.
 
+**Preparación del despliegue**
+
+- Agregado `frontend/vercel.json`: reescrituras de SPA, caché inmutable para `/assets/*` y cabeceras de seguridad. Sin las reescrituras, entrar directo a `/nosotros` devuelve 404.
+- El dominio dejó de estar escrito a mano en tres archivos: ahora sale de `VITE_SITE_URL`, con respaldo automático en `VERCEL_PROJECT_PRODUCTION_URL` y en localhost.
+- `robots.txt` y `sitemap.xml` dejaron de versionarse; los genera un plugin de `vite.config.ts` durante el build, a partir de esa misma URL.
+- Registrada la desviación de hosting respecto de la arquitectura aprobada (`DF-09`) y actualizado `DF-04`.
+- Rama `feature/frontend` publicada en GitHub para que Vercel la tome como previsualización. `main` queda intacto.
+
 ## Pendiente para la próxima sesión
 
 - Revisión de accesibilidad con lector de pantalla real (hasta ahora sólo se validó la estructura).
-- Decisiones `DF-01` a `DF-08` en `docs/decisiones/decisiones-frontend.md`.
+- Decisiones `DF-01` a `DF-03` y `DF-05` a `DF-09` en `docs/decisiones/decisiones-frontend.md`.
+- `DF-03` (prerenderizado) sigue siendo lo que más pesa: hasta resolverlo, un enlace compartido por WhatsApp o LinkedIn muestra el título genérico, no el de la página.

@@ -15,6 +15,24 @@ npm run preview  # sirve el build
 npm run lint     # oxlint
 ```
 
+## Variables de entorno
+
+| Variable | Para qué | Si falta |
+|---|---|---|
+| `VITE_SITE_URL` | URL absoluta del sitio, sin barra final. Alimenta el `canonical`, Open Graph, el `sitemap.xml` y el `robots.txt`. | Se usa `VERCEL_PROJECT_PRODUCTION_URL` si el build corre en Vercel; si no, `http://localhost:5173`. |
+
+`robots.txt` y `sitemap.xml` **no están versionados**: los genera `vite.config.ts` durante el build, para que el dominio viva en un solo lugar. Al agregar una ruta pública hay que sumarla a `RUTAS_PUBLICAS` en ese archivo.
+
+Copiá `.env.example` a `.env.local` si querés fijar la URL en desarrollo.
+
+## Despliegue
+
+Publicado en **Vercel** con integración de GitHub. La configuración vive en `vercel.json`: reescrituras de SPA (sin ellas, entrar directo a `/nosotros` da 404), caché inmutable para `/assets/*` y cabeceras de seguridad.
+
+En Vercel, **Root Directory tiene que ser `frontend`**, porque el repositorio es un monorepo.
+
+`public/_redirects` es el equivalente para Cloudflare Pages y Vercel lo ignora. Conviven hasta que se cierre `DF-09` (ver `docs/decisiones/decisiones-frontend.md`).
+
 ## Estructura
 
 ```text
