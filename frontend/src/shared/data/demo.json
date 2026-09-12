@@ -1,0 +1,1802 @@
+{
+  "usuarios": [
+    {
+      "id": "u1",
+      "nombre": "Diego",
+      "apellido": "Rodríguez",
+      "email": "diego.rodriguez@ztechcrm.com.ar",
+      "rol": "ADMIN",
+      "iniciales": "DR",
+      "activo": true
+    },
+    {
+      "id": "u2",
+      "nombre": "María",
+      "apellido": "Santos",
+      "email": "maria.santos@ztechcrm.com.ar",
+      "rol": "RESPONSABLE_COMERCIAL",
+      "iniciales": "MS",
+      "activo": true
+    },
+    {
+      "id": "u3",
+      "nombre": "Lucas",
+      "apellido": "Fernández",
+      "email": "lucas.fernandez@ztechcrm.com.ar",
+      "rol": "VENDEDOR",
+      "iniciales": "LF",
+      "activo": true
+    },
+    {
+      "id": "u4",
+      "nombre": "Gabriela",
+      "apellido": "López",
+      "email": "gabriela.lopez@ztechcrm.com.ar",
+      "rol": "VENDEDOR",
+      "iniciales": "GL",
+      "activo": true
+    },
+    {
+      "id": "u5",
+      "nombre": "Andrés",
+      "apellido": "Martínez",
+      "email": "andres.martinez@ztechcrm.com.ar",
+      "rol": "VENDEDOR",
+      "iniciales": "AM",
+      "activo": true
+    }
+  ],
+  "empresas": [
+    {
+      "id": "e1",
+      "razonSocial": "Laboratorio Pharmatech S.A.",
+      "nombreComercial": "Pharmatech",
+      "cuit": "30-71456320-1",
+      "industria": "Farmacéutica",
+      "email": "contacto@pharmatech.com.ar",
+      "telefono": "+54 11 4789-3456",
+      "direccion": "Av. Belgrano 1850",
+      "localidad": "CABA",
+      "sitioWeb": "www.pharmatech.com.ar",
+      "estado": "CLIENTE",
+      "responsableId": "u3",
+      "origen": "Prospección comercial",
+      "observaciones": "Cliente activo desde marzo. Requieren espacios para capacitaciones regulares."
+    },
+    {
+      "id": "e2",
+      "razonSocial": "Soluciones Digitales Plus S.R.L.",
+      "nombreComercial": "DigitalPlus",
+      "cuit": "30-68923451-9",
+      "industria": "Software",
+      "email": "ventas@digitalplus.com.ar",
+      "telefono": "+54 11 5632-8901",
+      "direccion": "Juncal 542, piso 8",
+      "localidad": "CABA",
+      "sitioWeb": "www.digitalplus.com.ar",
+      "estado": "CLIENTE",
+      "responsableId": "u4",
+      "origen": "Recomendación",
+      "observaciones": "Gran consumidor de eventos de lanzamiento. Promedio 4-5 eventos anuales."
+    },
+    {
+      "id": "e3",
+      "razonSocial": "Logística Integral Argentina S.A.",
+      "nombreComercial": "LogistikaARG",
+      "cuit": "30-72145360-8",
+      "industria": "Logística",
+      "email": "eventos@logistikaarg.com.ar",
+      "telefono": "+54 11 6234-7890",
+      "direccion": "Ruta 9 Km 34",
+      "localidad": "Tigre",
+      "sitioWeb": "www.logistikaarg.com.ar",
+      "estado": "POTENCIAL",
+      "responsableId": "u5",
+      "origen": "Sitio web",
+      "observaciones": "Interés en reuniones de directorio para evaluación."
+    },
+    {
+      "id": "e4",
+      "razonSocial": "Banco Regional del Conurbano S.A.",
+      "nombreComercial": "BRC",
+      "cuit": "30-61234567-0",
+      "industria": "Banca",
+      "email": "coordinacion@brc.com.ar",
+      "telefono": "+54 11 5821-4567",
+      "direccion": "Av. Corrientes 350",
+      "localidad": "CABA",
+      "sitioWeb": "www.brc.com.ar",
+      "estado": "CLIENTE",
+      "responsableId": "u3",
+      "origen": "Cliente existente",
+      "observaciones": "Convenio corporativo activo. Usan salones para convenciones semestrales."
+    },
+    {
+      "id": "e5",
+      "razonSocial": "Consultoría Empresarial Nexus S.R.L.",
+      "nombreComercial": "NexusConsulting",
+      "cuit": "30-67834521-4",
+      "industria": "Consultoría",
+      "email": "info@nexusconsulting.com.ar",
+      "telefono": "+54 11 4567-8234",
+      "direccion": "Larrea 1222",
+      "localidad": "San Isidro",
+      "sitioWeb": "www.nexusconsulting.com.ar",
+      "estado": "INACTIVO",
+      "responsableId": "u4",
+      "origen": "Redes sociales",
+      "observaciones": "Contactado vía LinkedIn. Sin respuesta en dos meses."
+    },
+    {
+      "id": "e6",
+      "razonSocial": "RetailMax S.A.",
+      "nombreComercial": "RetailMax",
+      "cuit": "30-69873214-6",
+      "industria": "Retail",
+      "email": "eventos@retailmax.com.ar",
+      "telefono": "+54 11 3456-7890",
+      "direccion": "Av. Santa Fe 2500",
+      "localidad": "CABA",
+      "sitioWeb": "www.retailmax.com.ar",
+      "estado": "CLIENTE",
+      "responsableId": "u5",
+      "origen": "Evento del sector",
+      "observaciones": "Nos contactaron en EXPOCORP. Realizarán workshops internos."
+    },
+    {
+      "id": "e7",
+      "razonSocial": "Agroinsumos del Sur S.A.",
+      "nombreComercial": "AgroinsumosSur",
+      "cuit": "30-70654321-2",
+      "industria": "Agricultura",
+      "email": "comercial@agroinsumosSur.com.ar",
+      "telefono": "+54 11 5234-6789",
+      "direccion": "Av. General Paz 1200",
+      "localidad": "Quilmes",
+      "sitioWeb": "www.agroinsumosSur.com.ar",
+      "estado": "POTENCIAL",
+      "responsableId": "u3",
+      "origen": "Publicidad online",
+      "observaciones": "Campaña de Google Ads. Reunión programada para octubre."
+    },
+    {
+      "id": "e8",
+      "razonSocial": "Estudio Jurídico Rossi & Asociados S.A.S.",
+      "nombreComercial": "Rossi Legal",
+      "cuit": "30-68765432-1",
+      "industria": "Legal",
+      "email": "administracion@rossilegal.com.ar",
+      "telefono": "+54 11 4890-3456",
+      "direccion": "25 de Mayo 1500, piso 12",
+      "localidad": "CABA",
+      "sitioWeb": "www.rossilegal.com.ar",
+      "estado": "NO_CONTACTAR",
+      "responsableId": "u4",
+      "origen": "Prospección comercial",
+      "observaciones": "Declinó invitación. Utilizan sólo espacios propios."
+    },
+    {
+      "id": "e9",
+      "razonSocial": "Seguros Protección S.A.",
+      "nombreComercial": "Protección",
+      "cuit": "30-65234567-8",
+      "industria": "Seguros",
+      "email": "rrhh@proteccion.com.ar",
+      "telefono": "+54 11 5789-2345",
+      "direccion": "Mitre 1000",
+      "localidad": "Vicente López",
+      "sitioWeb": "www.proteccion.com.ar",
+      "estado": "CLIENTE",
+      "responsableId": "u5",
+      "origen": "Recomendación",
+      "observaciones": "Recomendados por BRC. Requieren 3 salones para evento anual."
+    },
+    {
+      "id": "e10",
+      "razonSocial": "Clínica San Rafael S.A.",
+      "nombreComercial": "San Rafael",
+      "cuit": "30-64123456-9",
+      "industria": "Salud",
+      "email": "capacitacion@sanrafael.com.ar",
+      "telefono": "+54 11 6543-2109",
+      "direccion": "Av. Maipú 1850",
+      "localidad": "San Justo",
+      "sitioWeb": "www.sanrafael.com.ar",
+      "estado": "POTENCIAL",
+      "responsableId": "u3",
+      "origen": "Sitio web",
+      "observaciones": "Buscando salón para jornada de capacitación médica continua."
+    },
+    {
+      "id": "e11",
+      "razonSocial": "Instituto Superior de Formación Continua S.R.L.",
+      "nombreComercial": "ISFContinua",
+      "cuit": "30-72987654-3",
+      "industria": "Educación",
+      "email": "coordinacion@isfcontinua.com.ar",
+      "telefono": "+54 11 4567-1234",
+      "direccion": "Av. Rivadavia 3450",
+      "localidad": "Morón",
+      "sitioWeb": "www.isfcontinua.com.ar",
+      "estado": "CLIENTE",
+      "responsableId": "u4",
+      "origen": "Cliente existente",
+      "observaciones": "Cliente de 2 años. Usan espacios para aulas virtuales y workshops."
+    },
+    {
+      "id": "e12",
+      "razonSocial": "Energías Renovables Sudamericana S.A.",
+      "nombreComercial": "EnerSud",
+      "cuit": "30-73456789-5",
+      "industria": "Energía",
+      "email": "eventos@enersud.com.ar",
+      "telefono": "+54 11 3234-5678",
+      "direccion": "Av. Juan B. Justo 2200",
+      "localidad": "Ramos Mejía",
+      "sitioWeb": "www.enersud.com.ar",
+      "estado": "POTENCIAL",
+      "responsableId": "u5",
+      "origen": "Redes sociales",
+      "observaciones": "Seguidor de Instagram. Consulta pendiente sobre lanzamiento de producto."
+    }
+  ],
+  "contactos": [
+    {
+      "id": "c1",
+      "nombre": "Martina",
+      "apellido": "Gómez",
+      "cargo": "Gerente de Recursos Humanos",
+      "email": "mgomez@pharmatech.com.ar",
+      "telefono": "+54 9 11 5432-1098",
+      "empresaId": "e1",
+      "responsableId": "u3",
+      "estado": "CLIENTE",
+      "origen": "Prospección comercial",
+      "observaciones": "Contacto principal para capacitaciones. Excelente predisposición."
+    },
+    {
+      "id": "c2",
+      "nombre": "Carlos",
+      "apellido": "Mendoza",
+      "cargo": "Jefe de Capacitación",
+      "email": "cmendoza@pharmatech.com.ar",
+      "telefono": "+54 9 11 6543-2109",
+      "empresaId": "e1",
+      "responsableId": "u3",
+      "estado": "CLIENTE",
+      "origen": "Prospección comercial",
+      "observaciones": "Participa en decisiones de logística para eventos internos."
+    },
+    {
+      "id": "c3",
+      "nombre": "Laura",
+      "apellido": "Sánchez",
+      "cargo": "Responsable de Marketing",
+      "email": "lsanchez@digitalplus.com.ar",
+      "telefono": "+54 9 11 7654-3210",
+      "empresaId": "e2",
+      "responsableId": "u4",
+      "estado": "CLIENTE",
+      "origen": "Recomendación",
+      "observaciones": "Toma decisiones sobre lanzamientos y eventos comerciales."
+    },
+    {
+      "id": "c4",
+      "nombre": "Fernando",
+      "apellido": "Pereira",
+      "cargo": "Coordinador de Eventos",
+      "email": "fpereira@digitalplus.com.ar",
+      "telefono": "+54 9 11 8765-4321",
+      "empresaId": null,
+      "responsableId": "u4",
+      "estado": "CLIENTE",
+      "origen": "Recomendación",
+      "observaciones": "Cliente individual. Organiza eventos para distintas empresas."
+    },
+    {
+      "id": "c5",
+      "nombre": "Rodolfo",
+      "apellido": "Díaz",
+      "cargo": "Gerente de Operaciones",
+      "email": "rdiaz@logistikaarg.com.ar",
+      "telefono": "+54 9 11 3456-7890",
+      "empresaId": "e3",
+      "responsableId": "u5",
+      "estado": "POTENCIAL",
+      "origen": "Sitio web",
+      "observaciones": "Interesado en reunión de directorio con presencia remota."
+    },
+    {
+      "id": "c6",
+      "nombre": "Verónica",
+      "apellido": "Álvarez",
+      "cargo": "Directora Comercial",
+      "email": "valvarez@brc.com.ar",
+      "telefono": "+54 9 11 4567-8901",
+      "empresaId": "e4",
+      "responsableId": "u3",
+      "estado": "CLIENTE",
+      "origen": "Cliente existente",
+      "observaciones": "Contacto ejecutivo. Autoriza presupuestos de convenciones."
+    },
+    {
+      "id": "c7",
+      "nombre": "Julián",
+      "apellido": "Castillo",
+      "cargo": "Jefe de Capacitación",
+      "email": "jcastillo@brc.com.ar",
+      "telefono": "+54 9 11 5678-9012",
+      "empresaId": "e4",
+      "responsableId": "u3",
+      "estado": "CLIENTE",
+      "origen": "Cliente existente",
+      "observaciones": "Coordina los detalles logísticos con nuestro equipo."
+    },
+    {
+      "id": "c8",
+      "nombre": "Pamela",
+      "apellido": "Rodríguez",
+      "cargo": "Gerente de Administración",
+      "email": "prodriguez@nexusconsulting.com.ar",
+      "telefono": "+54 9 11 6789-0123",
+      "empresaId": "e5",
+      "responsableId": "u4",
+      "estado": "INACTIVO",
+      "origen": "Redes sociales",
+      "observaciones": "Contactada vía LinkedIn. No ha respondido follow-ups."
+    },
+    {
+      "id": "c9",
+      "nombre": "Roberto",
+      "apellido": "Molina",
+      "cargo": "Responsable de Marketing",
+      "email": "rmolina@retailmax.com.ar",
+      "telefono": "+54 9 11 7890-1234",
+      "empresaId": "e6",
+      "responsableId": "u5",
+      "estado": "CLIENTE",
+      "origen": "Evento del sector",
+      "observaciones": "Muy interesado en espacios modulares para workshops."
+    },
+    {
+      "id": "c10",
+      "nombre": "Sofía",
+      "apellido": "Vega",
+      "cargo": "Coordinadora de Eventos",
+      "email": "svega@retailmax.com.ar",
+      "telefono": "+54 9 11 8901-2345",
+      "empresaId": "e6",
+      "responsableId": "u5",
+      "estado": "CLIENTE",
+      "origen": "Evento del sector",
+      "observaciones": "Ejecutiva de proyectos. Requiere reuniones frecuentes de seguimiento."
+    },
+    {
+      "id": "c11",
+      "nombre": "Mauro",
+      "apellido": "López",
+      "cargo": "Gerente Comercial",
+      "email": "mlopez@agroinsumosSur.com.ar",
+      "telefono": "+54 9 11 2345-6789",
+      "empresaId": "e7",
+      "responsableId": "u3",
+      "estado": "POTENCIAL",
+      "origen": "Publicidad online",
+      "observaciones": "Primera reunión programada. Buenas señales de interés."
+    },
+    {
+      "id": "c12",
+      "nombre": "Alejandra",
+      "apellido": "Tejada",
+      "cargo": "Directora de RRHH",
+      "email": "atejada@proteccion.com.ar",
+      "telefono": "+54 9 11 3456-7890",
+      "empresaId": "e9",
+      "responsableId": "u5",
+      "estado": "CLIENTE",
+      "origen": "Recomendación",
+      "observaciones": "Contacto clave. Organiza el evento anual de toda la empresa."
+    },
+    {
+      "id": "c13",
+      "nombre": "Patricia",
+      "apellido": "Núñez",
+      "cargo": "Jefa de Capacitación",
+      "email": "pnuñez@sanrafael.com.ar",
+      "telefono": "+54 9 11 4567-8901",
+      "empresaId": "e10",
+      "responsableId": "u3",
+      "estado": "POTENCIAL",
+      "origen": "Sitio web",
+      "observaciones": "Solicita propuesta para 40 personas en noviembre."
+    },
+    {
+      "id": "c14",
+      "nombre": "Gonzalo",
+      "apellido": "Flores",
+      "cargo": "Coordinador Académico",
+      "email": "gflores@isfcontinua.com.ar",
+      "telefono": "+54 9 11 5678-9012",
+      "empresaId": "e11",
+      "responsableId": "u4",
+      "estado": "CLIENTE",
+      "origen": "Cliente existente",
+      "observaciones": "Gestiona reservas mensuales. Muy puntual con pagos."
+    },
+    {
+      "id": "c15",
+      "nombre": "Nicolás",
+      "apellido": "Campos",
+      "cargo": "Gerente de Proyectos",
+      "email": "ncampos@enersud.com.ar",
+      "telefono": "+54 9 11 6789-0123",
+      "empresaId": "e12",
+      "responsableId": "u5",
+      "estado": "POTENCIAL",
+      "origen": "Redes sociales",
+      "observaciones": "Responde a través de Instagram. Sugiere Teams para próxima reunión."
+    },
+    {
+      "id": "c16",
+      "nombre": "Isabel",
+      "apellido": "Ramírez",
+      "cargo": "Office Manager",
+      "email": "iramirez@cliente-independiente.com.ar",
+      "telefono": "+54 9 11 7890-1234",
+      "empresaId": null,
+      "responsableId": "u4",
+      "estado": "CLIENTE",
+      "origen": "Recomendación",
+      "observaciones": "Contacto individual. Organiza eventos corporativos freelance para múltiples empresas."
+    }
+  ],
+  "salones": [
+    {
+      "id": "s1",
+      "nombre": "Sala Directorio Ejecutivo",
+      "capacidad": 20,
+      "tarifaPorJornada": 185000,
+      "direccion": "Av. Corrientes 1800, piso 3",
+      "localidad": "CABA",
+      "estado": "DISPONIBLE",
+      "equipamiento": [
+        "proyector 4K",
+        "pantalla LED",
+        "sistema de audio",
+        "videoconferencia",
+        "catering",
+        "wifi dedicado",
+        "climatización"
+      ],
+      "descripcion": "Espacio elegante con vista a la avenida. Ideal para reuniones ejecutivas y directorios."
+    },
+    {
+      "id": "s2",
+      "nombre": "Auditorio Norte",
+      "capacidad": 50,
+      "tarifaPorJornada": 420000,
+      "direccion": "Av. Belgrano 2200, planta baja",
+      "localidad": "CABA",
+      "estado": "DISPONIBLE",
+      "equipamiento": [
+        "proyector 4K",
+        "pantalla LED",
+        "sistema de audio profesional",
+        "videoconferencia",
+        "cabina de traducción",
+        "estacionamiento",
+        "wifi dedicado",
+        "climatización"
+      ],
+      "descripcion": "Auditorio de capacidad máxima con técnico audiovisual incluido. Ideal para convenciones y lanzamientos."
+    },
+    {
+      "id": "s3",
+      "nombre": "Sala Innovación",
+      "capacidad": 35,
+      "tarifaPorJornada": 245000,
+      "direccion": "Larrea 500, piso 2",
+      "localidad": "San Isidro",
+      "estado": "DISPONIBLE",
+      "equipamiento": [
+        "proyector 4K",
+        "pizarra inteligente",
+        "sistema de audio",
+        "videoconferencia",
+        "wifi dedicado",
+        "estacionamiento",
+        "climatización"
+      ],
+      "descripcion": "Ambiente moderno con pizarras colaborativas. Perfecto para workshops y sesiones de brainstorming."
+    },
+    {
+      "id": "s4",
+      "nombre": "Espacio Flex",
+      "capacidad": 25,
+      "tarifaPorJornada": 125000,
+      "direccion": "Acoyte 1500, piso 1",
+      "localidad": "Caballito",
+      "estado": "DISPONIBLE",
+      "equipamiento": [
+        "proyector 4K",
+        "pantalla LED",
+        "sistema de audio",
+        "videoconferencia",
+        "pizarra",
+        "wifi dedicado"
+      ],
+      "descripcion": "Sala versátil con muebles modulares. Ideal para capacitaciones y reuniones de equipo."
+    },
+    {
+      "id": "s5",
+      "nombre": "Salón Panorama",
+      "capacidad": 40,
+      "tarifaPorJornada": 310000,
+      "direccion": "Av. Rivadavia 3100, piso 4",
+      "localidad": "Morón",
+      "estado": "DISPONIBLE",
+      "equipamiento": [
+        "proyector 4K",
+        "pantalla LED doble",
+        "sistema de audio",
+        "videoconferencia",
+        "catering",
+        "estacionamiento",
+        "wifi dedicado",
+        "climatización"
+      ],
+      "descripcion": "Sala con vista panorámica del área urbana. Excelente para eventos corporativos e incentivos."
+    },
+    {
+      "id": "s6",
+      "nombre": "Aula Virtual Premium",
+      "capacidad": 18,
+      "tarifaPorJornada": 85000,
+      "direccion": "Av. Santa Fe 2000, piso 5",
+      "localidad": "CABA",
+      "estado": "DISPONIBLE",
+      "equipamiento": [
+        "proyector 4K",
+        "pantalla LED",
+        "videoconferencia",
+        "sistema de audio",
+        "wifi dedicado",
+        "climatización"
+      ],
+      "descripcion": "Sala especializada para reuniones virtuales y webinars. Equipamiento técnico de última generación."
+    }
+  ],
+  "etapas": [
+    {
+      "id": "et1",
+      "nombre": "Consulta recibida",
+      "orden": 1,
+      "tipo": "ABIERTA",
+      "color": "teal"
+    },
+    {
+      "id": "et2",
+      "nombre": "Necesidad relevada",
+      "orden": 2,
+      "tipo": "ABIERTA",
+      "color": "blue"
+    },
+    {
+      "id": "et3",
+      "nombre": "Salón propuesto",
+      "orden": 3,
+      "tipo": "ABIERTA",
+      "color": "violet"
+    },
+    {
+      "id": "et4",
+      "nombre": "Presupuesto enviado",
+      "orden": 4,
+      "tipo": "ABIERTA",
+      "color": "indigo"
+    },
+    {
+      "id": "et5",
+      "nombre": "Negociación",
+      "orden": 5,
+      "tipo": "ABIERTA",
+      "color": "amber"
+    },
+    {
+      "id": "et6",
+      "nombre": "Reserva confirmada",
+      "orden": 6,
+      "tipo": "GANADA",
+      "color": "green"
+    },
+    {
+      "id": "et7",
+      "nombre": "Oportunidad perdida",
+      "orden": 7,
+      "tipo": "PERDIDA",
+      "color": "red"
+    }
+  ],
+  "oportunidades": [
+    {
+      "id": "o1",
+      "titulo": "Capacitación anual de liderazgo",
+      "empresaId": "e1",
+      "contactoId": "c1",
+      "responsableId": "u3",
+      "salonId": "s4",
+      "etapaId": "et1",
+      "estado": "ABIERTA",
+      "valorEstimado": 150000,
+      "probabilidad": 25,
+      "fechaEstimadaCierre": "2026-10-15",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-10",
+      "cantidadAsistentes": 22,
+      "tipoEvento": "Capacitación",
+      "origen": "Prospección comercial",
+      "motivoPerdidaId": null,
+      "observaciones": "Primera consulta de la empresa. Cliente potencial con historial positivo.",
+      "creadaEl": "2026-08-20"
+    },
+    {
+      "id": "o2",
+      "titulo": "Lanzamiento de producto Q4 2026",
+      "empresaId": "e2",
+      "contactoId": "c3",
+      "responsableId": "u4",
+      "salonId": "s2",
+      "etapaId": "et2",
+      "estado": "ABIERTA",
+      "valorEstimado": 380000,
+      "probabilidad": 50,
+      "fechaEstimadaCierre": "2026-10-20",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-22",
+      "cantidadAsistentes": 45,
+      "tipoEvento": "Lanzamiento de producto",
+      "origen": "Recomendación",
+      "motivoPerdidaId": null,
+      "observaciones": "Cliente recurrente. Estamos en fase de relevamiento de requisitos técnicos.",
+      "creadaEl": "2026-09-01"
+    },
+    {
+      "id": "o3",
+      "titulo": "Workshop interno de UX/UI",
+      "empresaId": "e2",
+      "contactoId": "c4",
+      "responsableId": "u4",
+      "salonId": "s3",
+      "etapaId": "et3",
+      "estado": "ABIERTA",
+      "valorEstimado": 210000,
+      "probabilidad": 60,
+      "fechaEstimadaCierre": "2026-09-25",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-10-08",
+      "cantidadAsistentes": 32,
+      "tipoEvento": "Workshop",
+      "origen": "Cliente existente",
+      "motivoPerdidaId": null,
+      "observaciones": "Ya hemos propuesto Sala Innovación. Esperamos confirmación esta semana.",
+      "creadaEl": "2026-08-28"
+    },
+    {
+      "id": "o4",
+      "titulo": "Reunión de directorio trimestral",
+      "empresaId": "e3",
+      "contactoId": "c5",
+      "responsableId": "u5",
+      "salonId": "s1",
+      "etapaId": "et2",
+      "estado": "ABIERTA",
+      "valorEstimado": 125000,
+      "probabilidad": 35,
+      "fechaEstimadaCierre": "2026-10-05",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-10-30",
+      "cantidadAsistentes": 18,
+      "tipoEvento": "Reunión ejecutiva",
+      "origen": "Sitio web",
+      "motivoPerdidaId": null,
+      "observaciones": "Cliente potencial. Requiere conexión remota de participantes. Enviamos link de videoconferencia.",
+      "creadaEl": "2026-09-05"
+    },
+    {
+      "id": "o5",
+      "titulo": "Convención de ventas 2026",
+      "empresaId": "e4",
+      "contactoId": "c6",
+      "responsableId": "u3",
+      "salonId": "s5",
+      "etapaId": "et4",
+      "estado": "ABIERTA",
+      "valorEstimado": 550000,
+      "probabilidad": 75,
+      "fechaEstimadaCierre": "2026-10-10",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-18",
+      "cantidadAsistentes": 38,
+      "tipoEvento": "Convención",
+      "origen": "Cliente existente",
+      "motivoPerdidaId": null,
+      "observaciones": "Presupuesto enviado. Aguardamos aprobación de comité directivo.",
+      "creadaEl": "2026-08-25"
+    },
+    {
+      "id": "o6",
+      "titulo": "Jornada de capacitación de docentes",
+      "empresaId": "e11",
+      "contactoId": "c14",
+      "responsableId": "u4",
+      "salonId": "s3",
+      "etapaId": "et3",
+      "estado": "ABIERTA",
+      "valorEstimado": 190000,
+      "probabilidad": 55,
+      "fechaEstimadaCierre": "2026-09-30",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-10-15",
+      "cantidadAsistentes": 28,
+      "tipoEvento": "Capacitación",
+      "origen": "Cliente existente",
+      "motivoPerdidaId": null,
+      "observaciones": "Cliente leal. Propuesta en revisión. Coordinar catering especial (vegetariano).",
+      "creadaEl": "2026-08-30"
+    },
+    {
+      "id": "o7",
+      "titulo": "Seminario de actualización legal",
+      "empresaId": "e10",
+      "contactoId": "c13",
+      "responsableId": "u3",
+      "salonId": "s4",
+      "etapaId": "et1",
+      "estado": "ABIERTA",
+      "valorEstimado": 140000,
+      "probabilidad": 40,
+      "fechaEstimadaCierre": "2026-11-01",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-25",
+      "cantidadAsistentes": 20,
+      "tipoEvento": "Seminario",
+      "origen": "Sitio web",
+      "motivoPerdidaId": null,
+      "observaciones": "Consulta inicial recibida. Cliente solicitó info de espacios para 40 personas.",
+      "creadaEl": "2026-09-08"
+    },
+    {
+      "id": "o8",
+      "titulo": "Jornada de capacitación en ventas",
+      "empresaId": "e1",
+      "contactoId": "c2",
+      "responsableId": "u3",
+      "salonId": "s1",
+      "etapaId": "et3",
+      "estado": "ABIERTA",
+      "valorEstimado": 165000,
+      "probabilidad": 65,
+      "fechaEstimadaCierre": "2026-10-12",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-10-28",
+      "cantidadAsistentes": 19,
+      "tipoEvento": "Capacitación",
+      "origen": "Cliente existente",
+      "motivoPerdidaId": null,
+      "observaciones": "Propuesta enviada. Cliente muy interesado. Aguardamos confirmación.",
+      "creadaEl": "2026-08-22"
+    },
+    {
+      "id": "o9",
+      "titulo": "Evento de incentivos y reconocimiento",
+      "empresaId": "e9",
+      "contactoId": "c12",
+      "responsableId": "u5",
+      "salonId": "s5",
+      "etapaId": "et5",
+      "estado": "ABIERTA",
+      "valorEstimado": 420000,
+      "probabilidad": 85,
+      "fechaEstimadaCierre": "2026-10-02",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-20",
+      "cantidadAsistentes": 39,
+      "tipoEvento": "Evento corporativo",
+      "origen": "Recomendación",
+      "motivoPerdidaId": null,
+      "observaciones": "En negociación final. Solicitaron descuento por volumen. Proponiendo paquete all-inclusive.",
+      "creadaEl": "2026-08-18"
+    },
+    {
+      "id": "o10",
+      "titulo": "Talleres de desarrollo profesional",
+      "empresaId": "e6",
+      "contactoId": "c9",
+      "responsableId": "u5",
+      "salonId": "s3",
+      "etapaId": "et2",
+      "estado": "ABIERTA",
+      "valorEstimado": 280000,
+      "probabilidad": 45,
+      "fechaEstimadaCierre": "2026-10-18",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-03",
+      "cantidadAsistentes": 34,
+      "tipoEvento": "Workshop",
+      "origen": "Evento del sector",
+      "motivoPerdidaId": null,
+      "observaciones": "Cliente con demanda recurrente de salones. Relevamos necesidades de modularidad.",
+      "creadaEl": "2026-09-02"
+    },
+    {
+      "id": "o11",
+      "titulo": "Reunión de directores comerciales",
+      "empresaId": "e4",
+      "contactoId": "c7",
+      "responsableId": "u3",
+      "salonId": "s1",
+      "etapaId": "et5",
+      "estado": "ABIERTA",
+      "valorEstimado": 110000,
+      "probabilidad": 70,
+      "fechaEstimadaCierre": "2026-09-28",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-10-16",
+      "cantidadAsistentes": 16,
+      "tipoEvento": "Reunión ejecutiva",
+      "origen": "Cliente existente",
+      "motivoPerdidaId": null,
+      "observaciones": "Solicitud urgente. Negociando términos de pago. Muy probable que cierre esta semana.",
+      "creadaEl": "2026-09-07"
+    },
+    {
+      "id": "o12",
+      "titulo": "Sesión de brainstorming estratégico",
+      "empresaId": "e7",
+      "contactoId": "c11",
+      "responsableId": "u3",
+      "salonId": "s3",
+      "etapaId": "et4",
+      "estado": "ABIERTA",
+      "valorEstimado": 235000,
+      "probabilidad": 50,
+      "fechaEstimadaCierre": "2026-10-08",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-10-30",
+      "cantidadAsistentes": 30,
+      "tipoEvento": "Workshop",
+      "origen": "Publicidad online",
+      "motivoPerdidaId": null,
+      "observaciones": "Presupuesto enviado hace 3 días. Cliente muy interesado en Sala Innovación.",
+      "creadaEl": "2026-09-04"
+    },
+    {
+      "id": "o13",
+      "titulo": "Conferencia regional de logística",
+      "empresaId": null,
+      "contactoId": "c16",
+      "responsableId": "u4",
+      "salonId": "s2",
+      "etapaId": "et6",
+      "estado": "GANADA",
+      "valorEstimado": 850000,
+      "probabilidad": 100,
+      "fechaEstimadaCierre": "2026-09-15",
+      "fechaRealCierre": "2026-09-10",
+      "fechaEvento": "2026-10-21",
+      "cantidadAsistentes": 48,
+      "tipoEvento": "Conferencia",
+      "origen": "Recomendación",
+      "motivoPerdidaId": null,
+      "observaciones": "Reserva confirmada. Depósito acreditado. Evento es para múltiples empresas del sector logístico.",
+      "creadaEl": "2026-07-20"
+    },
+    {
+      "id": "o14",
+      "titulo": "Evento anual de clientes",
+      "empresaId": "e2",
+      "contactoId": "c3",
+      "responsableId": "u4",
+      "salonId": "s5",
+      "etapaId": "et6",
+      "estado": "GANADA",
+      "valorEstimado": 480000,
+      "probabilidad": 100,
+      "fechaEstimadaCierre": "2026-09-08",
+      "fechaRealCierre": "2026-08-25",
+      "fechaEvento": "2026-10-12",
+      "cantidadAsistentes": 40,
+      "tipoEvento": "Evento corporativo",
+      "origen": "Cliente existente",
+      "motivoPerdidaId": null,
+      "observaciones": "Contrato firmado. Coordinando detalles finales de catering y AV.",
+      "creadaEl": "2026-07-22"
+    },
+    {
+      "id": "o15",
+      "titulo": "Capacitación de compliance normativo",
+      "empresaId": "e12",
+      "contactoId": "c15",
+      "responsableId": "u5",
+      "salonId": "s4",
+      "etapaId": "et7",
+      "estado": "PERDIDA",
+      "valorEstimado": 165000,
+      "probabilidad": 0,
+      "fechaEstimadaCierre": "2026-09-20",
+      "fechaRealCierre": "2026-09-09",
+      "fechaEvento": "2026-11-24",
+      "cantidadAsistentes": 17,
+      "tipoEvento": "Capacitación",
+      "origen": "Redes sociales",
+      "motivoPerdidaId": "mp2",
+      "observaciones": "Cliente eligió otro proveedor. Nos comunicó que encontraron opción más cercana a sus oficinas.",
+      "creadaEl": "2026-08-15"
+    },
+    {
+      "id": "o16",
+      "titulo": "Encuentro de ejecutivos",
+      "empresaId": "e5",
+      "contactoId": "c8",
+      "responsableId": "u4",
+      "salonId": "s1",
+      "etapaId": "et1",
+      "estado": "ABIERTA",
+      "valorEstimado": 180000,
+      "probabilidad": 30,
+      "fechaEstimadaCierre": "2026-11-10",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-12-05",
+      "cantidadAsistentes": 20,
+      "tipoEvento": "Reunión ejecutiva",
+      "origen": "Redes sociales",
+      "motivoPerdidaId": null,
+      "observaciones": "Contacto retomado de Nexus Consulting. Solicitan disponibilidad para fin de año.",
+      "creadaEl": "2026-09-06"
+    },
+    {
+      "id": "o17",
+      "titulo": "Jornada de integración de equipos",
+      "empresaId": "e8",
+      "contactoId": null,
+      "responsableId": "u5",
+      "salonId": "s4",
+      "etapaId": "et2",
+      "estado": "ABIERTA",
+      "valorEstimado": 195000,
+      "probabilidad": 45,
+      "fechaEstimadaCierre": "2026-10-25",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-15",
+      "cantidadAsistentes": 24,
+      "tipoEvento": "Team building",
+      "origen": "Prospección comercial",
+      "motivoPerdidaId": null,
+      "observaciones": "Estudio jurídico requiere espacio para dinámicas de integración. Contacto principal no disponible, coordinamos por admin.",
+      "creadaEl": "2026-09-07"
+    },
+    {
+      "id": "o18",
+      "titulo": "Presentación de nuevos productos",
+      "empresaId": "e3",
+      "contactoId": null,
+      "responsableId": "u3",
+      "salonId": "s2",
+      "etapaId": "et4",
+      "estado": "ABIERTA",
+      "valorEstimado": 540000,
+      "probabilidad": 60,
+      "fechaEstimadaCierre": "2026-10-15",
+      "fechaRealCierre": null,
+      "fechaEvento": "2026-11-08",
+      "cantidadAsistentes": 42,
+      "tipoEvento": "Lanzamiento de producto",
+      "origen": "Cliente existente",
+      "motivoPerdidaId": null,
+      "observaciones": "Logística Integral requiere Auditorio Norte. Presupuesto en revisión por gerencia comercial.",
+      "creadaEl": "2026-09-09"
+    }
+  ],
+  "origenes": [
+    {
+      "id": "or1",
+      "nombre": "Sitio web"
+    },
+    {
+      "id": "or2",
+      "nombre": "Recomendación"
+    },
+    {
+      "id": "or3",
+      "nombre": "Redes sociales"
+    },
+    {
+      "id": "or4",
+      "nombre": "Evento del sector"
+    },
+    {
+      "id": "or5",
+      "nombre": "Prospección comercial"
+    },
+    {
+      "id": "or6",
+      "nombre": "Cliente existente"
+    },
+    {
+      "id": "or7",
+      "nombre": "Publicidad online"
+    }
+  ],
+  "motivosPerdida": [
+    {
+      "id": "mp1",
+      "nombre": "Precio fuera de presupuesto"
+    },
+    {
+      "id": "mp2",
+      "nombre": "Fecha no disponible"
+    },
+    {
+      "id": "mp3",
+      "nombre": "Capacidad insuficiente"
+    },
+    {
+      "id": "mp4",
+      "nombre": "Eligió otro proveedor"
+    },
+    {
+      "id": "mp5",
+      "nombre": "Evento cancelado"
+    },
+    {
+      "id": "mp6",
+      "nombre": "Sin respuesta del cliente"
+    }
+  ],
+  "tiposActividad": [
+    {
+      "id": "ta1",
+      "nombre": "Llamada",
+      "icono": "llamada"
+    },
+    {
+      "id": "ta2",
+      "nombre": "Correo electrónico",
+      "icono": "email"
+    },
+    {
+      "id": "ta3",
+      "nombre": "Mensaje de WhatsApp",
+      "icono": "mensaje"
+    },
+    {
+      "id": "ta4",
+      "nombre": "Reunión presencial",
+      "icono": "reunion"
+    },
+    {
+      "id": "ta5",
+      "nombre": "Reunión virtual",
+      "icono": "virtual"
+    },
+    {
+      "id": "ta6",
+      "nombre": "Visita al salón",
+      "icono": "demo"
+    },
+    {
+      "id": "ta7",
+      "nombre": "Envío de propuesta",
+      "icono": "propuesta"
+    },
+    {
+      "id": "ta8",
+      "nombre": "Nota interna",
+      "icono": "nota"
+    }
+  ],
+  "actividades": [
+    {
+      "id": "a1",
+      "tipoId": "ta1",
+      "titulo": "Primer contacto",
+      "detalle": "Llamada inicial con Martina para presentar servicios. Mostró interés en capacitación. Siguientes pasos: enviar presentación de salones.",
+      "usuarioId": "u3",
+      "empresaId": "e1",
+      "contactoId": "c1",
+      "oportunidadId": "o1",
+      "fecha": "2026-08-20T10:30:00"
+    },
+    {
+      "id": "a2",
+      "tipoId": "ta2",
+      "titulo": "Envío de material",
+      "detalle": "Enviamos catálogo de salones con fotos, capacidades y tarifas. Cliente confirmó recepción e indicó preferencia por espacios con videoconferencia.",
+      "usuarioId": "u3",
+      "empresaId": "e1",
+      "contactoId": "c1",
+      "oportunidadId": "o1",
+      "fecha": "2026-08-21T14:15:00"
+    },
+    {
+      "id": "a3",
+      "tipoId": "ta4",
+      "titulo": "Visita al salón",
+      "detalle": "Cliente visitó Sala Directorio Ejecutivo. Quedó conforme con equipamiento y ambiente. Requieren 22 personas. Solicitó presupuesto detallado.",
+      "usuarioId": "u3",
+      "empresaId": "e1",
+      "contactoId": "c2",
+      "oportunidadId": "o8",
+      "fecha": "2026-08-23T11:00:00"
+    },
+    {
+      "id": "a4",
+      "tipoId": "ta2",
+      "titulo": "Propuesta formal",
+      "detalle": "Enviada presupuesto detallado por capacitación de liderazgo para 22 personas. Incluye refrigerio y coffee break. Total: $150.000 por jornada.",
+      "usuarioId": "u3",
+      "empresaId": "e1",
+      "contactoId": "c2",
+      "oportunidadId": "o8",
+      "fecha": "2026-08-25T09:45:00"
+    },
+    {
+      "id": "a5",
+      "tipoId": "ta1",
+      "titulo": "Seguimiento",
+      "detalle": "Llamada de seguimiento a propuesta. Cliente indicó que debe presentarse ante comité. Próxima confirmación en 5 días. Datos muy promisorios.",
+      "usuarioId": "u3",
+      "empresaId": "e1",
+      "contactoId": "c1",
+      "oportunidadId": "o1",
+      "fecha": "2026-08-28T15:30:00"
+    },
+    {
+      "id": "a6",
+      "tipoId": "ta2",
+      "titulo": "Lanzamiento Q4",
+      "detalle": "Contacto de DigitalPlus requiere auditorio de 50 personas para evento de lanzamiento. Enviamos información de disponibilidad de Auditorio Norte.",
+      "usuarioId": "u4",
+      "empresaId": "e2",
+      "contactoId": "c3",
+      "oportunidadId": "o2",
+      "fecha": "2026-09-01T10:00:00"
+    },
+    {
+      "id": "a7",
+      "tipoId": "ta5",
+      "titulo": "Videoconferencia de relevamiento",
+      "detalle": "Reunión virtual con equipo de organización de DigitalPlus. Detallamos requisitos técnicos: videoconferencia profesional, cabina de traducción, catering de lujo.",
+      "usuarioId": "u4",
+      "empresaId": "e2",
+      "contactoId": "c4",
+      "oportunidadId": "o2",
+      "fecha": "2026-09-02T14:00:00"
+    },
+    {
+      "id": "a8",
+      "tipoId": "ta6",
+      "titulo": "Tour de Auditorio Norte",
+      "detalle": "Cliente visitó Auditorio Norte con coordinador técnico. Explicamos capacidades audiovisuales, cabina traducción, estacionamiento VIP. Muy positivo.",
+      "usuarioId": "u4",
+      "empresaId": "e2",
+      "contactoId": "c3",
+      "oportunidadId": "o2",
+      "fecha": "2026-09-03T13:30:00"
+    },
+    {
+      "id": "a9",
+      "tipoId": "ta7",
+      "titulo": "Propuesta enviada",
+      "detalle": "Presupuesto completo de Lanzamiento Q4. Auditorio Norte + catering premium + traducción simultánea. Total: $380.000. Esperamos respuesta.",
+      "usuarioId": "u4",
+      "empresaId": "e2",
+      "contactoId": "c3",
+      "oportunidadId": "o2",
+      "fecha": "2026-09-04T11:15:00"
+    },
+    {
+      "id": "a10",
+      "tipoId": "ta1",
+      "titulo": "Consulta Sala Innovación",
+      "detalle": "Llamada con Fernando Pereira para confirmar disponibilidad de Sala Innovación en octubre. Espacio ideal para workshop de UX. Propone 32 personas. Muy interesado.",
+      "usuarioId": "u4",
+      "empresaId": "e2",
+      "contactoId": "c4",
+      "oportunidadId": "o3",
+      "fecha": "2026-09-02T15:45:00"
+    },
+    {
+      "id": "a11",
+      "tipoId": "ta2",
+      "titulo": "Propuesta workshop",
+      "detalle": "Enviamos presupuesto de Sala Innovación para workshop de 32 personas. Incluye pizarras colaborativas, wifi dedicado, refrigerio. Total: $210.000.",
+      "usuarioId": "u4",
+      "empresaId": "e2",
+      "contactoId": "c4",
+      "oportunidadId": "o3",
+      "fecha": "2026-09-03T09:30:00"
+    },
+    {
+      "id": "a12",
+      "tipoId": "ta3",
+      "titulo": "Mensaje de confirmación",
+      "detalle": "WhatsApp a Rodolfo de LogistikaARG. Solicitó info de Sala Directorio para reunión de directorio. Enviamos ficha técnica e información de videoconferencia.",
+      "usuarioId": "u5",
+      "empresaId": "e3",
+      "contactoId": "c5",
+      "oportunidadId": "o4",
+      "fecha": "2026-09-05T12:00:00"
+    },
+    {
+      "id": "a13",
+      "tipoId": "ta4",
+      "titulo": "Reunión de presentación",
+      "detalle": "Encuentro presencial con directivo de LogistikaARG. Explicamos capacidad de videoconferencia remota y opciones de transmisión. Cliente interesadísimo en las opciones técnicas.",
+      "usuarioId": "u5",
+      "empresaId": "e3",
+      "contactoId": "c5",
+      "oportunidadId": "o4",
+      "fecha": "2026-09-06T10:30:00"
+    },
+    {
+      "id": "a14",
+      "tipoId": "ta2",
+      "titulo": "Presupuesto reunión directorio",
+      "detalle": "Presupuesto detallado de Sala Directorio Ejecutivo para 18 personas con videoconferencia profesional. Incluye soporte técnico. Total: $125.000.",
+      "usuarioId": "u5",
+      "empresaId": "e3",
+      "contactoId": "c5",
+      "oportunidadId": "o4",
+      "fecha": "2026-09-06T16:45:00"
+    },
+    {
+      "id": "a15",
+      "tipoId": "ta1",
+      "titulo": "Confirmación evento incentivos",
+      "detalle": "Llamada final con Alejandra de Protección sobre evento de incentivos. Negoció descuento por volumen. Acordamos 10% off. Falta autorización formal.",
+      "usuarioId": "u5",
+      "empresaId": "e9",
+      "contactoId": "c12",
+      "oportunidadId": "o9",
+      "fecha": "2026-09-08T17:00:00"
+    },
+    {
+      "id": "a16",
+      "tipoId": "ta7",
+      "titulo": "Envío presupuesto final",
+      "detalle": "Propuesta definitiva Salón Panorama para evento de incentivos con 10% descuento. Paquete all-inclusive: catering, audiovisual, estacionamiento VIP.",
+      "usuarioId": "u5",
+      "empresaId": "e9",
+      "contactoId": "c12",
+      "oportunidadId": "o9",
+      "fecha": "2026-09-08T18:30:00"
+    },
+    {
+      "id": "a17",
+      "tipoId": "ta1",
+      "titulo": "Seguimiento reunión de directorio",
+      "detalle": "Llamada de seguimiento a propuesta de reunión trimestral de BRC. Cliente solicitó adaptar configuración de las mesas para videoconferencia. Estamos revisando.",
+      "usuarioId": "u3",
+      "empresaId": "e4",
+      "contactoId": "c6",
+      "oportunidadId": "o5",
+      "fecha": "2026-09-07T11:30:00"
+    },
+    {
+      "id": "a18",
+      "tipoId": "ta2",
+      "titulo": "Confirmación de evento logístico",
+      "detalle": "Email a Isabel confirmando detalles de conferencia regional para 48 personas. Auditorio Norte confirmado para octubre. Coordinando catering y welcome pack.",
+      "usuarioId": "u4",
+      "empresaId": null,
+      "contactoId": "c16",
+      "oportunidadId": "o13",
+      "fecha": "2026-09-09T09:00:00"
+    },
+    {
+      "id": "a19",
+      "tipoId": "ta8",
+      "titulo": "Nota: seguimiento perdida",
+      "detalle": "Cliente EnerSud eligió otro proveedor más cercano a sus oficinas. Comunicó vía email. Analizamos qué mejorar para futuras oportunidades con empresa.",
+      "usuarioId": "u5",
+      "empresaId": "e12",
+      "contactoId": "c15",
+      "oportunidadId": "o15",
+      "fecha": "2026-09-09T14:15:00"
+    },
+    {
+      "id": "a20",
+      "tipoId": "ta3",
+      "titulo": "Consulta urgente",
+      "detalle": "WhatsApp de Nicolás, de EnerSud, consultando disponibilidad para un evento adicional. Responden por canal informal. Solicita reunión por Teams la semana próxima.",
+      "usuarioId": "u5",
+      "empresaId": "e12",
+      "contactoId": "c15",
+      "oportunidadId": null,
+      "fecha": "2026-09-11T16:00:00"
+    }
+  ],
+  "historialEtapas": [
+    {
+      "id": "h1",
+      "oportunidadId": "o1",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u3",
+      "fecha": "2026-08-20T12:17:00"
+    },
+    {
+      "id": "h2",
+      "oportunidadId": "o2",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u4",
+      "fecha": "2026-09-01T15:34:00"
+    },
+    {
+      "id": "h3",
+      "oportunidadId": "o2",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u4",
+      "fecha": "2026-09-12T09:51:00"
+    },
+    {
+      "id": "h4",
+      "oportunidadId": "o3",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u4",
+      "fecha": "2026-08-28T12:08:00"
+    },
+    {
+      "id": "h5",
+      "oportunidadId": "o3",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u4",
+      "fecha": "2026-09-05T15:25:00"
+    },
+    {
+      "id": "h6",
+      "oportunidadId": "o3",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u4",
+      "fecha": "2026-09-12T09:42:00"
+    },
+    {
+      "id": "h7",
+      "oportunidadId": "o4",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u5",
+      "fecha": "2026-09-05T12:59:00"
+    },
+    {
+      "id": "h8",
+      "oportunidadId": "o4",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u5",
+      "fecha": "2026-09-12T15:16:00"
+    },
+    {
+      "id": "h9",
+      "oportunidadId": "o5",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u3",
+      "fecha": "2026-08-25T09:33:00"
+    },
+    {
+      "id": "h10",
+      "oportunidadId": "o5",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u3",
+      "fecha": "2026-08-31T12:50:00"
+    },
+    {
+      "id": "h11",
+      "oportunidadId": "o5",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u3",
+      "fecha": "2026-09-06T15:07:00"
+    },
+    {
+      "id": "h12",
+      "oportunidadId": "o5",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u3",
+      "fecha": "2026-09-12T09:24:00"
+    },
+    {
+      "id": "h13",
+      "oportunidadId": "o6",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u4",
+      "fecha": "2026-08-30T12:41:00"
+    },
+    {
+      "id": "h14",
+      "oportunidadId": "o6",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u4",
+      "fecha": "2026-09-05T15:58:00"
+    },
+    {
+      "id": "h15",
+      "oportunidadId": "o6",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u4",
+      "fecha": "2026-09-12T09:15:00"
+    },
+    {
+      "id": "h16",
+      "oportunidadId": "o7",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u3",
+      "fecha": "2026-09-08T12:32:00"
+    },
+    {
+      "id": "h17",
+      "oportunidadId": "o8",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u3",
+      "fecha": "2026-08-22T15:49:00"
+    },
+    {
+      "id": "h18",
+      "oportunidadId": "o8",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u3",
+      "fecha": "2026-09-01T09:06:00"
+    },
+    {
+      "id": "h19",
+      "oportunidadId": "o8",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u3",
+      "fecha": "2026-09-12T12:23:00"
+    },
+    {
+      "id": "h20",
+      "oportunidadId": "o9",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u5",
+      "fecha": "2026-08-18T15:40:00"
+    },
+    {
+      "id": "h21",
+      "oportunidadId": "o9",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u5",
+      "fecha": "2026-08-24T09:57:00"
+    },
+    {
+      "id": "h22",
+      "oportunidadId": "o9",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u5",
+      "fecha": "2026-08-30T12:14:00"
+    },
+    {
+      "id": "h23",
+      "oportunidadId": "o9",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u5",
+      "fecha": "2026-09-06T15:31:00"
+    },
+    {
+      "id": "h24",
+      "oportunidadId": "o9",
+      "etapaOrigenId": "et4",
+      "etapaDestinoId": "et5",
+      "usuarioId": "u5",
+      "fecha": "2026-09-12T09:48:00"
+    },
+    {
+      "id": "h25",
+      "oportunidadId": "o10",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u5",
+      "fecha": "2026-09-02T12:05:00"
+    },
+    {
+      "id": "h26",
+      "oportunidadId": "o10",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u5",
+      "fecha": "2026-09-12T15:22:00"
+    },
+    {
+      "id": "h27",
+      "oportunidadId": "o11",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u3",
+      "fecha": "2026-09-07T09:39:00"
+    },
+    {
+      "id": "h28",
+      "oportunidadId": "o11",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u3",
+      "fecha": "2026-09-08T12:56:00"
+    },
+    {
+      "id": "h29",
+      "oportunidadId": "o11",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u3",
+      "fecha": "2026-09-09T15:13:00"
+    },
+    {
+      "id": "h30",
+      "oportunidadId": "o11",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u3",
+      "fecha": "2026-09-11T09:30:00"
+    },
+    {
+      "id": "h31",
+      "oportunidadId": "o11",
+      "etapaOrigenId": "et4",
+      "etapaDestinoId": "et5",
+      "usuarioId": "u3",
+      "fecha": "2026-09-12T12:47:00"
+    },
+    {
+      "id": "h32",
+      "oportunidadId": "o12",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u3",
+      "fecha": "2026-09-04T15:04:00"
+    },
+    {
+      "id": "h33",
+      "oportunidadId": "o12",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u3",
+      "fecha": "2026-09-07T09:21:00"
+    },
+    {
+      "id": "h34",
+      "oportunidadId": "o12",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u3",
+      "fecha": "2026-09-09T12:38:00"
+    },
+    {
+      "id": "h35",
+      "oportunidadId": "o12",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u3",
+      "fecha": "2026-09-12T15:55:00"
+    },
+    {
+      "id": "h36",
+      "oportunidadId": "o13",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u4",
+      "fecha": "2026-07-20T09:12:00"
+    },
+    {
+      "id": "h37",
+      "oportunidadId": "o13",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u4",
+      "fecha": "2026-07-30T12:29:00"
+    },
+    {
+      "id": "h38",
+      "oportunidadId": "o13",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u4",
+      "fecha": "2026-08-10T15:46:00"
+    },
+    {
+      "id": "h39",
+      "oportunidadId": "o13",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u4",
+      "fecha": "2026-08-20T09:03:00"
+    },
+    {
+      "id": "h40",
+      "oportunidadId": "o13",
+      "etapaOrigenId": "et4",
+      "etapaDestinoId": "et5",
+      "usuarioId": "u4",
+      "fecha": "2026-08-31T12:20:00"
+    },
+    {
+      "id": "h41",
+      "oportunidadId": "o13",
+      "etapaOrigenId": "et5",
+      "etapaDestinoId": "et6",
+      "usuarioId": "u4",
+      "fecha": "2026-09-10T15:37:00"
+    },
+    {
+      "id": "h42",
+      "oportunidadId": "o14",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u4",
+      "fecha": "2026-07-22T09:54:00"
+    },
+    {
+      "id": "h43",
+      "oportunidadId": "o14",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u4",
+      "fecha": "2026-07-29T12:11:00"
+    },
+    {
+      "id": "h44",
+      "oportunidadId": "o14",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u4",
+      "fecha": "2026-08-05T15:28:00"
+    },
+    {
+      "id": "h45",
+      "oportunidadId": "o14",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u4",
+      "fecha": "2026-08-11T09:45:00"
+    },
+    {
+      "id": "h46",
+      "oportunidadId": "o14",
+      "etapaOrigenId": "et4",
+      "etapaDestinoId": "et5",
+      "usuarioId": "u4",
+      "fecha": "2026-08-18T12:02:00"
+    },
+    {
+      "id": "h47",
+      "oportunidadId": "o14",
+      "etapaOrigenId": "et5",
+      "etapaDestinoId": "et6",
+      "usuarioId": "u4",
+      "fecha": "2026-08-25T15:19:00"
+    },
+    {
+      "id": "h48",
+      "oportunidadId": "o15",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u5",
+      "fecha": "2026-08-15T09:36:00"
+    },
+    {
+      "id": "h49",
+      "oportunidadId": "o15",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u5",
+      "fecha": "2026-08-20T12:53:00"
+    },
+    {
+      "id": "h50",
+      "oportunidadId": "o15",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u5",
+      "fecha": "2026-08-25T15:10:00"
+    },
+    {
+      "id": "h51",
+      "oportunidadId": "o15",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u5",
+      "fecha": "2026-08-30T09:27:00"
+    },
+    {
+      "id": "h52",
+      "oportunidadId": "o15",
+      "etapaOrigenId": "et4",
+      "etapaDestinoId": "et5",
+      "usuarioId": "u5",
+      "fecha": "2026-09-04T12:44:00"
+    },
+    {
+      "id": "h53",
+      "oportunidadId": "o15",
+      "etapaOrigenId": "et5",
+      "etapaDestinoId": "et7",
+      "usuarioId": "u5",
+      "fecha": "2026-09-09T15:01:00"
+    },
+    {
+      "id": "h54",
+      "oportunidadId": "o16",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u4",
+      "fecha": "2026-09-06T09:18:00"
+    },
+    {
+      "id": "h55",
+      "oportunidadId": "o17",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u5",
+      "fecha": "2026-09-07T12:35:00"
+    },
+    {
+      "id": "h56",
+      "oportunidadId": "o17",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u5",
+      "fecha": "2026-09-12T15:52:00"
+    },
+    {
+      "id": "h57",
+      "oportunidadId": "o18",
+      "etapaOrigenId": null,
+      "etapaDestinoId": "et1",
+      "usuarioId": "u3",
+      "fecha": "2026-09-09T09:09:00"
+    },
+    {
+      "id": "h58",
+      "oportunidadId": "o18",
+      "etapaOrigenId": "et1",
+      "etapaDestinoId": "et2",
+      "usuarioId": "u3",
+      "fecha": "2026-09-10T12:26:00"
+    },
+    {
+      "id": "h59",
+      "oportunidadId": "o18",
+      "etapaOrigenId": "et2",
+      "etapaDestinoId": "et3",
+      "usuarioId": "u3",
+      "fecha": "2026-09-11T15:43:00"
+    },
+    {
+      "id": "h60",
+      "oportunidadId": "o18",
+      "etapaOrigenId": "et3",
+      "etapaDestinoId": "et4",
+      "usuarioId": "u3",
+      "fecha": "2026-09-12T09:00:00"
+    }
+  ]
+}

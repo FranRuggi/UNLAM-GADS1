@@ -1,0 +1,124 @@
+/* ---------------------------------------------------------------------------
+   zTech CRM — tokens de diseño
+   Derivados del logo: isotipo "Z" con degradado turquesa → violeta
+   y wordmark en índigo profundo.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* --- Marca ------------------------------------------------------------- */
+  --marca-turquesa: #2e95a3;
+  --marca-turquesa-claro: #4fb3bf;
+  --marca-azul: #4878a0;
+  --marca-violeta: #6c489c;
+  --marca-violeta-claro: #8a68b8;
+  --marca-indigo: #301854;
+  --marca-indigo-profundo: #211038;
+
+  --degradado-marca: linear-gradient(100deg, var(--marca-turquesa) 0%, var(--marca-azul) 48%, var(--marca-violeta) 100%);
+  --degradado-sutil: linear-gradient(160deg, #f7f5fc 0%, #f1f7f8 100%);
+
+  /* --- Neutros (matiz violeta) ------------------------------------------- */
+  --tinta-900: #1a1130;
+  --tinta-800: #2a2044;
+  --tinta-700: #3d3458;
+  --tinta-600: #544b6d;
+  --tinta-500: #6e6685;
+  --tinta-400: #8f889f;
+  --tinta-300: #b0aabe;
+  --tinta-200: #d5d1de;
+
+  --papel: #ffffff;
+  --papel-2: #faf9fc;
+  --papel-3: #f4f2f8;
+  --papel-4: #edeaf3;
+
+  --linea: #e3dfec;
+  --linea-suave: #eeebf4;
+  --linea-fuerte: #cec8dc;
+
+  /* --- Semánticos --------------------------------------------------------- */
+  --exito: #1a7a52;
+  --exito-fondo: #e6f4ed;
+  --exito-borde: #b8ded0;
+
+  --alerta: #8a5a0b;
+  --alerta-fondo: #fdf3e0;
+  --alerta-borde: #ecd6a9;
+
+  --peligro: #b02a21;
+  --peligro-fondo: #fceceb;
+  --peligro-borde: #f0c4c1;
+
+  --info: #1c5f86;
+  --info-fondo: #e7f1f8;
+  --info-borde: #bcd7e8;
+
+  /* --- Colores de etapa del embudo ---------------------------------------- */
+  --etapa-teal: #2e95a3;
+  --etapa-teal-fondo: #e4f3f5;
+  --etapa-blue: #3d6f9e;
+  --etapa-blue-fondo: #e6eef6;
+  --etapa-violet: #6c489c;
+  --etapa-violet-fondo: #efe9f7;
+  --etapa-indigo: #43307a;
+  --etapa-indigo-fondo: #eceaf6;
+  --etapa-amber: #8a5a0b;
+  --etapa-amber-fondo: #fbf1dd;
+  --etapa-green: #1a7a52;
+  --etapa-green-fondo: #e5f3ec;
+  --etapa-red: #b02a21;
+  --etapa-red-fondo: #fbeae9;
+
+  /* --- Tipografía ---------------------------------------------------------- */
+  --fuente-titulos: "Sora", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fuente-texto: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fuente-mono: ui-monospace, "Cascadia Mono", "SF Mono", Menlo, monospace;
+
+  --texto-xs: 0.75rem;    /* 12 */
+  --texto-sm: 0.8125rem;  /* 13 */
+  --texto-base: 0.9375rem;/* 15 */
+  --texto-md: 1rem;       /* 16 */
+  --texto-lg: 1.125rem;   /* 18 */
+  --texto-xl: 1.375rem;   /* 22 */
+  --texto-2xl: 1.75rem;   /* 28 */
+  --texto-3xl: 2.25rem;   /* 36 */
+  --texto-4xl: 3rem;      /* 48 */
+
+  /* --- Espaciado (escala de 4) --------------------------------------------- */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.25rem;
+  --e-6: 1.5rem;
+  --e-8: 2rem;
+  --e-10: 2.5rem;
+  --e-12: 3rem;
+  --e-16: 4rem;
+  --e-20: 5rem;
+  --e-24: 6rem;
+
+  /* --- Forma ---------------------------------------------------------------- */
+  --radio-sm: 4px;
+  --radio: 6px;
+  --radio-md: 8px;
+  --radio-lg: 12px;
+  --radio-xl: 16px;
+  --radio-pill: 999px;
+
+  /* Sombras discretas: la jerarquía la dan los bordes, no el blur. */
+  --sombra-sm: 0 1px 2px rgba(26, 17, 48, 0.05);
+  --sombra: 0 1px 3px rgba(26, 17, 48, 0.07), 0 1px 2px rgba(26, 17, 48, 0.04);
+  --sombra-md: 0 4px 12px rgba(26, 17, 48, 0.08);
+  --sombra-lg: 0 12px 32px rgba(26, 17, 48, 0.12);
+
+  --anillo-foco: 0 0 0 3px rgba(108, 72, 156, 0.28);
+
+  /* --- Medidas ------------------------------------------------------------- */
+  --ancho-contenido: 1140px;
+  --ancho-lectura: 68ch;
+  --barra-lateral: 244px;
+  --barra-superior: 60px;
+
+  --transicion: 150ms ease;
+}

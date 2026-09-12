@@ -1,0 +1,15 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editores y sistema
+.DS_Store
+Thumbs.db
+.idea/
+*.suo
+*.sw?
