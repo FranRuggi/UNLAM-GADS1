@@ -9,12 +9,16 @@ zTech CRM se implementa como un **monolito modular** en un monorepo. La solució
 | Área | Tecnología |
 |---|---|
 | Frontend | React, TypeScript y Vite |
-| Backend | Java y Spring Boot |
+| Backend | **Java 25 (LTS) y Spring Boot 4.x** |
 | Seguridad | Spring Security y JWT |
 | Persistencia | PostgreSQL, Spring Data JPA, Hibernate y Flyway |
 | Pruebas | JUnit, Spring Boot Test, Testcontainers, Vitest, Testing Library y Playwright |
-| Hosting | Cloudflare Pages (frontend), Render (backend) y PostgreSQL administrado |
+| Hosting | Cloudflare Pages (frontend), Render (backend) y **Supabase** como PostgreSQL administrado |
 | Empaquetado backend | Docker |
+
+Versiones y proveedor concretos en [ADR-002](../decisiones/adr/ADR-002-plataforma-supabase-render.md).
+Supabase se usa **sólo como PostgreSQL**: la autenticación es propia, con Spring Security y
+JWT. No se usan Supabase Auth, RLS ni PostgREST.
 
 React Router, TanStack Query, React Hook Form y Zod son las bibliotecas previstas para el frontend. Redux no se incorpora salvo que aparezca una necesidad concreta.
 
@@ -35,12 +39,16 @@ El navegador nunca accede a PostgreSQL. El backend es el único punto para auten
 ztech-crm/
 ├── frontend/
 ├── backend/
+│   └── Dockerfile
 ├── docs/
-├── infra/
 └── .github/
 ```
 
-`frontend/` y `backend/` son proyectos independientes. `infra/` contiene artefactos de despliegue, como el `Dockerfile`; `.github/` contiene automatización de integración. No se requieren Nx, Turborepo ni un orquestador de monorepo inicialmente.
+`frontend/` y `backend/` son proyectos independientes, desarrollados en paralelo; el
+contrato entre ambos es el OpenAPI que publica el backend. El `Dockerfile` vive en
+`backend/` (Render apunta ahí) en lugar de una carpeta `infra/` separada; `.github/`
+contiene automatización de integración. No se requieren Nx, Turborepo ni un orquestador de
+monorepo inicialmente.
 
 ## Contrato e integración
 
@@ -58,7 +66,7 @@ Los errores deben ser consistentes y no revelar datos de otro tenant. Un conflic
 
 ## Despliegue y operación
 
-El frontend se compila como SPA y se publica en Cloudflare Pages. El backend se construye como imagen Docker y se despliega en Render. Para el TP puede utilizarse Neon como PostgreSQL administrado; una evolución SaaS puede ubicar la base en Render.
+El frontend se compila como SPA y se publica en Cloudflare Pages. El backend se construye como imagen Docker y se despliega en Render. La base es **Supabase**, accedida mediante el pooler Supavisor en modo *session*: el endpoint directo de Supabase es IPv6 y la salida de Render no lo resuelve de forma confiable.
 
 Spring Boot Actuator expone al menos `/actuator/health`. Los logs incluyen `requestId`, `userId` y `tenantId`, sin credenciales ni datos sensibles. La configuración se suministra por variables de entorno; ningún secreto se versiona.
 

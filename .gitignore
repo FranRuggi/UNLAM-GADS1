@@ -1,0 +1,12 @@
+# Sistema operativo / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.iml
+
+# .claude/ se versiona (contexto y specs compartidos con el equipo y con la
+# instancia de frontend), salvo la config local de la herramienta.
+.claude/settings.local.json
+
+# frontend/ y backend/ tienen su propio .gitignore para build artifacts.

@@ -1,0 +1,8 @@
+# DB_URL/DB_USERNAME/DB_PASSWORD los inyecta @DynamicPropertySource desde el
+# contenedor de Testcontainers en cada test — acá sólo lo que puede ser estático.
+app:
+  jwt:
+    secret: "test-only-secret-not-for-production-use-1234567890abcdef"
+    expiration-minutes: 60
+  cors:
+    allowed-origins: http://localhost:5173

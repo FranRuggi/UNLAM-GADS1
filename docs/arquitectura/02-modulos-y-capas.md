@@ -9,22 +9,22 @@ El backend se divide por capacidades de negocio:
 | `tenancy` | Organizaciones y aislamiento | `Tenant` |
 | `access` | Login, usuarios, roles y autorización | `User`, roles |
 | `customers` | Empresas, contactos y responsables | `Company`, `Contact` |
-| `venues` | Salones, capacidad, tarifa y estado | `Venue` |
+| `offerings` | Producto o servicio ofrecido: salones y servicios adicionales | `Venue`, `EventService` |
 | `catalogs` | Catálogos configurables | `Stage`, `ActivityType`, `Origin`, `LossReason` |
 | `opportunities` | Embudo, asignación, cierres, reserva e historial | `Opportunity`, `StageHistory` |
 | `activities` | Interacciones e historial comercial | `Activity` |
 
-`opportunities` coordina referencias a clientes, salones, catálogos y usuarios, pero no debe manipular sus repositorios internos. Cada módulo publica operaciones mediante su paquete `api`.
+`opportunities` coordina referencias a clientes, salones, catálogos y usuarios, pero no debe manipular sus repositorios internos. Cada módulo expone operaciones a los demás **únicamente a través de su paquete `service`** ([ADR-001](../decisiones/adr/ADR-001-estructura-de-paquetes.md)).
 
 ```mermaid
 flowchart LR
     access --> tenancy
     customers --> access
-    venues --> tenancy
+    offerings --> tenancy
     catalogs --> tenancy
     opportunities --> access
     opportunities --> customers
-    opportunities --> venues
+    opportunities --> offerings
     opportunities --> catalogs
     activities --> access
     activities --> customers
@@ -37,46 +37,63 @@ Las flechas van del consumidor a la API pública del módulo consumido; no repre
 
 ```text
 module/
-├── api/             # contrato público para otros módulos
-├── application/     # casos de uso y límites transaccionales
-├── domain/          # entidades y reglas de negocio
-├── infrastructure/  # JPA, repositorios y adaptadores
-└── web/             # controladores y DTOs HTTP
+├── controller/   # entrada HTTP: @RestController
+├── service/      # casos de uso, límites transaccionales y contrato hacia otros módulos
+├── domain/       # entidades y reglas de negocio (+ enums/)
+├── dto/          # request/ y response/ del módulo
+├── repository/   # Spring Data JPA (+ specification/)
+└── mapper/       # conversión entidad ↔ DTO
 ```
 
 Reglas de dependencia:
 
-1. `web` convierte HTTP en comandos o consultas de aplicación.
-2. `application` coordina permisos, reglas, APIs de otros módulos y transacciones.
+1. `controller` convierte HTTP en llamadas al `service`; no accede a `repository` ni contiene reglas.
+2. `service` coordina permisos, reglas, servicios de otros módulos y transacciones.
 3. `domain` no depende de Spring MVC, DTOs HTTP ni detalles de persistencia.
-4. `infrastructure` implementa puertos de persistencia; no contiene reglas de negocio.
-5. Solo `api` es estable para consumidores externos al módulo.
-6. `shared` se limita a configuración, errores, seguridad y auditoría realmente transversales.
+4. `repository` sólo persiste; no contiene reglas de negocio.
+5. **Sólo `service` es estable para consumidores externos al módulo**; el resto es interno.
+6. `shared` se limita a configuración, errores, seguridad, validación y auditoría realmente transversales.
 
-Casos de uso como `CreateOpportunity`, `ChangeStage`, `ConfirmReservation` y `LoseOpportunity` deben ser operaciones explícitas. Cambiar una etapa no se modela como una actualización CRUD genérica porque también exige autorización, coherencia de estado e historial atómico.
+La nomenclatura de capas fue cambiada respecto de la versión original de este documento
+(`api/application/domain/infrastructure/web`); el motivo y las alternativas descartadas
+están en [ADR-001](../decisiones/adr/ADR-001-estructura-de-paquetes.md).
+
+Un caso de uso se separa en su propia clase de `service` cuando coordina más de una
+escritura con una regla de atomicidad real — no todo verbo lo amerita. Así quedó
+aplicado: `ChangeStage` es `ChangeStageService` propio, porque escribe `Opportunity` y
+`StageHistory` en la misma transacción y no puede modelarse como un `PUT` genérico. En
+cambio, crear o editar una oportunidad son métodos de `OpportunityService`: validan
+reglas reales (empresa o contacto, salón activo, etapa inicial abierta) pero escriben
+una sola entidad, así que no ganan nada con una clase aparte. `ConfirmReservation` y
+`LoseOpportunity` (Fase 7/8) se esperan como servicios propios, siguiendo el mismo
+criterio que `ChangeStage` — coordinan más de una escritura con reglas de estado.
 
 ## Organización del backend
 
 ```text
 backend/src/main/java/com/ztech/crm/
-├── shared/{config,security,error,audit}/
-├── tenancy/
-├── access/
-├── customers/
-├── venues/
-├── catalogs/
-├── opportunities/
-└── activities/
+├── shared/{config,security,exception,validation,audit,dto}/
+├── tenancy/        # implementado (Fase 0-1)
+├── access/         # implementado (Fase 1) — sólo login; ABM de usuarios es Fase 6
+├── customers/      # implementado (Fase 2)
+├── offerings/      # implementado, sólo lectura (Fase 3) — ABM es Fase 6
+├── catalogs/       # implementado, sólo lectura (Fase 3) — sólo `Stage`;
+│                   # ActivityType/Origin/LossReason y su ABM llegan en la Fase 6
+├── opportunities/  # implementado (Fase 3-4)
+└── activities/     # no existe todavía — Fase 7
 ```
 
-Las migraciones viven en `backend/src/main/resources/db/migration/` y siguen el patrón `V1__initial_schema.sql`, `V2__initial_catalogs.sql`.
+Estado real al cierre de Entrega 1 (24/09), detalle fase por fase en
+`.claude/specs-backend/tasks.md`.
+
+Las migraciones viven en `backend/src/main/resources/db/migration/` y siguen el patrón `V1__initial_schema.sql`, `V2__seed_catalogs.sql`.
 
 ## Organización del frontend
 
 ```text
 frontend/src/
 ├── app/{router,providers,layouts}/
-├── features/{auth,users,companies,contacts,venues,opportunities,activities,settings}/
+├── features/{auth,users,companies,contacts,offerings,opportunities,activities,settings}/
 └── shared/{api,components,hooks,types}/
 ```
 
@@ -84,9 +101,27 @@ Cada feature contiene páginas, componentes, validaciones, consultas y tipos pro
 
 ## Pruebas por límite
 
-- Dominio: reglas puras y transiciones.
-- Aplicación: casos de uso, permisos y atomicidad.
-- Infraestructura: consultas tenant-aware y migraciones con PostgreSQL real mediante Testcontainers.
-- Web: contratos HTTP, validación y códigos de respuesta.
+La intención original era una pirámide de 4 capas separadas para el backend (dominio,
+aplicación, infraestructura, web). En la práctica, hasta la Entrega 1, se aplicaron sólo
+dos estrategias — ambas contra infraestructura real, ninguna con mocks de repositorio o
+`@WebMvcTest` aislado:
+
+- **Unitarios (Mockito, sin Spring ni Testcontainers)**: sólo para servicios con lógica
+  de negocio genuina que vale la pena aislar — hoy, `ChangeStageServiceTest`, que prueba
+  que una excepción en el insert del historial se propaga sin `catch` (lo que permite
+  que `@Transactional` revierta también el cambio de etapa). Corren con `mvn test`
+  (Surefire).
+- **Integración de punta a punta (`*IT`, Testcontainers)**: un test por flujo relevante,
+  entrando por HTTP real (login incluido) y llegando a un PostgreSQL real con las
+  migraciones de Flyway aplicadas desde una base vacía. Cubren de una sola vez lo que la
+  pirámide original separaba en "aplicación" + "infraestructura" + "web": contratos
+  HTTP, validación, códigos de respuesta, tenant-aware queries y transacciones. Corren
+  con `mvn verify` (Failsafe), no con `mvn test` — requieren Docker Desktop.
+- No hay tests de "dominio" puro (una entidad sin repositorio ni service alrededor):
+  las reglas de las entidades son chicas y quedan cubiertas indirectamente por los `*IT`.
+
+34 tests en total al cierre de Entrega 1 (5 unitarios + 29 de integración). Detalle caso
+por caso en `.claude/specs-backend/tasks.md`.
+
 - Frontend: comportamiento de features con Vitest y Testing Library.
 - E2E: recorridos de entrega con Playwright.

@@ -1,0 +1,375 @@
+{
+  "info": {
+    "name": "zTech CRM API",
+    "description": "Colección para probar la API en local — Entrega 1 (24/09). Endpoints: Auth, Companies, Contacts, Venues, EventServices, Stages, Opportunities. Correr primero 'Login' — auto-setea {{accessToken}} para el resto de la colección.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "companyId", "value": "", "type": "string" },
+    { "key": "contactId", "value": "", "type": "string" },
+    { "key": "venueId", "value": "", "type": "string" },
+    { "key": "stageId", "value": "", "type": "string" },
+    { "key": "opportunityId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@ztech.local\",\n  \"password\": \"Admin123!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Login exitoso', function () { pm.response.to.have.status(200); });",
+                  "if (pm.response.code === 200) {",
+                  "    const body = pm.response.json();",
+                  "    pm.collectionVariables.set('accessToken', body.accessToken);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Crear empresa",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Eventos del Sur SA\",\n  \"cuit\": \"30-71234567-9\",\n  \"industry\": \"Turismo y eventos\",\n  \"email\": \"contacto@eventosdelsur.com\",\n  \"phone\": \"+54 11 4000-0000\",\n  \"address\": \"Av. Rivadavia 4500, San Justo\",\n  \"website\": \"https://eventosdelsur.com\",\n  \"status\": \"POTENCIAL\",\n  \"salesRepId\": null,\n  \"originId\": null,\n  \"notes\": \"Cliente potencial grande\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/companies", "host": ["{{baseUrl}}"], "path": ["companies"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('companyId', pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Editar empresa",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Eventos del Sur SA\",\n  \"cuit\": \"30-71234567-9\",\n  \"industry\": \"Turismo y eventos\",\n  \"email\": \"contacto@eventosdelsur.com\",\n  \"phone\": \"+54 11 4000-0000\",\n  \"address\": \"Av. Rivadavia 4500, San Justo\",\n  \"website\": \"https://eventosdelsur.com\",\n  \"status\": \"CLIENTE\",\n  \"salesRepId\": null,\n  \"originId\": null,\n  \"notes\": \"Pasó a ser cliente\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["companies", "{{companyId}}"]
+            }
+          }
+        },
+        {
+          "name": "Detalle de empresa (con contactos)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/companies/{{companyId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["companies", "{{companyId}}"]
+            }
+          }
+        },
+        {
+          "name": "Listar empresas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/companies?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["companies"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Contacts",
+      "item": [
+        {
+          "name": "Crear contacto (vinculado a empresa)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": {{companyId}},\n  \"firstName\": \"María\",\n  \"lastName\": \"Gómez\",\n  \"document\": \"30111222\",\n  \"position\": \"Responsable de compras\",\n  \"email\": \"maria.gomez@eventosdelsur.com\",\n  \"phone\": \"+54 11 4111-1111\",\n  \"status\": \"POTENCIAL\",\n  \"salesRepId\": null,\n  \"originId\": null,\n  \"notes\": null\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/contacts", "host": ["{{baseUrl}}"], "path": ["contacts"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('contactId', pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Editar contacto",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": {{companyId}},\n  \"firstName\": \"María\",\n  \"lastName\": \"Gómez\",\n  \"document\": \"30111222\",\n  \"position\": \"Gerente de compras\",\n  \"email\": \"maria.gomez@eventosdelsur.com\",\n  \"phone\": \"+54 11 4111-1111\",\n  \"status\": \"CLIENTE\",\n  \"salesRepId\": null,\n  \"originId\": null,\n  \"notes\": \"Ascendió a gerente\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contacts/{{contactId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["contacts", "{{contactId}}"]
+            }
+          }
+        },
+        {
+          "name": "Detalle de contacto",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/contacts/{{contactId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["contacts", "{{contactId}}"]
+            }
+          }
+        },
+        {
+          "name": "Listar contactos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/contacts?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["contacts"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Venues",
+      "item": [
+        {
+          "name": "Listar salones",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/venues", "host": ["{{baseUrl}}"], "path": ["venues"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const venues = pm.response.json();",
+                  "    if (venues.length > 0) pm.collectionVariables.set('venueId', venues[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Detalle de salón",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/venues/{{venueId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["venues", "{{venueId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "EventServices",
+      "item": [
+        {
+          "name": "Listar servicios adicionales",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/event-services", "host": ["{{baseUrl}}"], "path": ["event-services"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Stages",
+      "item": [
+        {
+          "name": "Listar etapas del embudo",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/stages", "host": ["{{baseUrl}}"], "path": ["stages"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const stages = pm.response.json();",
+                  "    const open = stages.find(s => s.kind === 'OPEN');",
+                  "    if (open) pm.collectionVariables.set('stageId', open.id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Opportunities",
+      "item": [
+        {
+          "name": "Crear oportunidad",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Evento de fin de año - Eventos del Sur\",\n  \"companyId\": {{companyId}},\n  \"contactId\": null,\n  \"salesRepId\": 1,\n  \"venueId\": {{venueId}},\n  \"stageId\": {{stageId}},\n  \"estimatedValue\": 500000.00,\n  \"probability\": 60,\n  \"eventDate\": \"2026-12-20T20:00:00Z\",\n  \"attendeeCount\": 40,\n  \"estimatedCloseDate\": \"2026-11-15\",\n  \"originId\": null,\n  \"notes\": \"Primer contacto muy interesado\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/opportunities", "host": ["{{baseUrl}}"], "path": ["opportunities"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.collectionVariables.set('opportunityId', pm.response.json().id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Editar oportunidad",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Evento de fin de año - Eventos del Sur (actualizado)\",\n  \"companyId\": {{companyId}},\n  \"contactId\": null,\n  \"venueId\": {{venueId}},\n  \"estimatedValue\": 650000.00,\n  \"probability\": 75,\n  \"eventDate\": \"2026-12-20T20:00:00Z\",\n  \"attendeeCount\": 45,\n  \"estimatedCloseDate\": \"2026-11-15\",\n  \"originId\": null,\n  \"notes\": \"Ajustado tras la visita al salón\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/opportunities/{{opportunityId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["opportunities", "{{opportunityId}}"]
+            }
+          }
+        },
+        {
+          "name": "Detalle de oportunidad",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/opportunities/{{opportunityId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["opportunities", "{{opportunityId}}"]
+            }
+          }
+        },
+        {
+          "name": "Listar oportunidades",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/opportunities?page=0&size=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["opportunities"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tablero por etapa",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/opportunities/board",
+              "host": ["{{baseUrl}}"],
+              "path": ["opportunities", "board"]
+            }
+          }
+        },
+        {
+          "name": "Cambiar de etapa",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"stageId\": {{stageId}},\n  \"note\": \"Avanza tras la visita al salón\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/opportunities/{{opportunityId}}/stage",
+              "host": ["{{baseUrl}}"],
+              "path": ["opportunities", "{{opportunityId}}", "stage"]
+            },
+            "description": "OJO: {{stageId}} se completa con la PRIMERA etapa abierta al correr 'Listar etapas del embudo'. Para probar un cambio real, correr ese request de nuevo y pegar manualmente el id de una etapa distinta a la actual de la oportunidad."
+          }
+        }
+      ]
+    }
+  ]
+}
