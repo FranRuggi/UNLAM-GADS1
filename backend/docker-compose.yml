@@ -1,0 +1,13 @@
+# Levanta la API en un contenedor, contra Supabase, espejando Render (DT-24).
+# No incluye un Postgres local: la base del proyecto es Supabase.
+# Los tests de integración no usan este archivo — Testcontainers levanta su propio
+# Postgres efímero por corrida (requiere Docker Desktop activo, nada más).
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${PORT:-8080}:${PORT:-8080}"

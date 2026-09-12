@@ -2,39 +2,68 @@
 
 ## Project Structure & Module Organization
 
-This repository is currently in the requirements and architecture phase for the UNLaM GADS1 corporate-events CRM. The root contains:
+Monorepo del CRM de salones de eventos corporativos (UNLaM GADS1).
 
-- `README.md`: short project overview.
-- `docs/`: versioned architecture, planning, and decision records in Markdown.
-- `Arquitectura General — zTech CRM.docx`: approved architecture and technology stack.
-- `ERS - CRM Eventos Corporativos.docx`: consolidated software requirements specification.
-- `TP_CRM_relevamiento.docx`: assignment analysis, domain model, and delivery scope.
+- `README.md`: overview del proyecto.
+- `CLAUDE.md` y `.claude/context/`: contexto destilado para las instancias de Claude Code.
+- `docs/consignas/`: consignas originales del TP en PDF. **Fuente de máxima autoridad.**
+- `docs/arquitectura/`, `docs/planificacion/`, `docs/decisiones/`: arquitectura, plan y
+  registro de decisiones. Los ADR viven en `docs/decisiones/adr/`.
+- `backend/`: API REST en Java 25 + Spring Boot 4. Incluye su `Dockerfile`.
+- `frontend/`: SPA en React + TypeScript + Vite.
 
-No application source, automated tests, or asset directories are committed yet. When implementation begins, keep code and tests in clearly named top-level directories appropriate to the chosen stack (for example, `src/` and `tests/`) and update both this guide and `README.md` with the resulting layout.
+`backend/` y `frontend/` se desarrollan en paralelo por instancias distintas de Claude
+Code. El contrato entre ambos es el OpenAPI que publica el backend, exportado a
+`docs/api/openapi.json`.
+
+Estructura de paquetes del backend: módulo de negocio al primer nivel, capas adentro
+(`com.ztech.crm.<modulo>.{controller,service,domain,dto,repository,mapper}`), con lo
+transversal en `com.ztech.crm.shared`. Ver
+[ADR-001](docs/decisiones/adr/ADR-001-estructura-de-paquetes.md).
 
 ## Build, Test, and Development Commands
 
-There is currently no build or test toolchain. Do not document or depend on local-only scripts. Useful repository checks are:
+Backend (Maven, desde `backend/`):
 
 ```powershell
-git status --short   # Review tracked and untracked work
-git diff --check     # Detect whitespace errors in text changes
+./mvnw clean verify        # compila y corre toda la batería de tests
+./mvnw test                # sólo tests
+./mvnw spring-boot:run     # levanta la API en local (perfil local)
 ```
 
-Open each edited `.docx` file in Word or LibreOffice before committing it and confirm that headings, tables, diagrams, and page layout render correctly. Add exact setup, run, build, migration, and test commands here once the stack is committed.
+Los tests de integración usan **Testcontainers**: requieren Docker Desktop corriendo.
+
+Verificaciones de repositorio:
+
+```powershell
+git status --short   # revisar trabajo pendiente
+git diff --check     # detectar errores de whitespace
+```
 
 ## Coding Style & Naming Conventions
 
-Keep Markdown concise, use ATX headings (`#`, `##`), and preserve the repository's Spanish domain terminology (for example, *oportunidad*, *etapa*, and *salón*). Retain requirement identifiers such as `RF-01`, `RN-01`, and `CA-01`; do not renumber them casually. Use descriptive filenames and avoid ambiguous variants such as `final2` or `nuevo`.
+Código, entidades, tablas y columnas en **inglés**; mensajes al usuario en **español**.
+Tablas y columnas en `snake_case` y plural; clases en `PascalCase`. Preservar la
+terminología de dominio en español dentro de la documentación (*oportunidad*, *etapa*,
+*salón*) y los identificadores de requisito (`RF-01`, `RN-01`, `CA-01`); no renumerarlos.
 
-For future code, commit the formatter and linter configuration with the first implementation and apply it consistently; do not introduce an undocumented style convention.
+Markdown conciso, encabezados ATX. Nombres de archivo descriptivos; evitar `final2`, `nuevo`.
 
 ## Testing Guidelines
 
-Until automated tests exist, validation is document-focused: cross-check changes against both requirements documents, verify internal references, and inspect exported/rendered output. Future features should include tests for backend authorization, opportunity stage history, logical deletion, reservation capacity, and overlapping confirmed bookings.
+Cada corte vertical incluye sus pruebas: dominio con JUnit puro, servicios con Mockito,
+repositorios y migraciones con Testcontainers sobre PostgreSQL real, y controladores con
+MockMvc. Casos negativos obligatorios: rol insuficiente, **acceso a otro tenant** (por
+listado y por id directo), transición de etapa inválida, reserva superpuesta y capacidad
+excedida. Las migraciones se prueban desde base vacía.
 
 ## Commit & Pull Request Guidelines
 
-The history currently contains only `Initial commit`, so no established convention exists. Use short, imperative subjects, optionally scoped, such as `docs: clarify reservation overlap rule`. Keep commits focused.
+Subjects imperativos y scopeados: `feat(opportunities): registrar historial de etapas`,
+`docs: registrar ADR-003`. Commits chicos y enfocados.
 
-Pull requests should explain the change and its requirement IDs, list validation performed, link the relevant issue, and include screenshots or an exported PDF when document layout changes. Call out unresolved decisions or scope changes explicitly.
+Los pull requests explican el cambio y sus IDs de requisito, listan la validación
+realizada, enlazan el issue correspondiente y llaman la atención sobre decisiones abiertas
+o cambios de alcance. Actualizar `docs/` y `CLAUDE.md` en el mismo PR que cambie un límite
+modular, un contrato, una tecnología, una regla crítica o un hito. Las decisiones de
+arquitectura irreversibles o costosas se registran como ADR **antes** de implementarse.

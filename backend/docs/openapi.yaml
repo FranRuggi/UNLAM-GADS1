@@ -1,0 +1,1215 @@
+openapi: 3.1.0
+info:
+  title: zTech CRM API
+  description: API del CRM de salones de eventos corporativos — UNLaM GADS1.
+  version: v1
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+security:
+- bearerAuth: []
+tags:
+- name: Opportunities
+  description: Gestión de oportunidades (BE-OPP-01..03/05/06)
+- name: Venues
+  description: Salones (BE-OFF-01)
+- name: Auth
+  description: Autenticación (BE-SEC-01)
+- name: EventServices
+  description: Servicios adicionales (BE-OFF-03)
+- name: Contacts
+  description: Gestión de contactos (BE-CUS-04..07)
+- name: Companies
+  description: Gestión de empresas (BE-CUS-01..03)
+- name: Stages
+  description: "Etapas del embudo comercial (BE-CAT-01, DP-06)"
+paths:
+  /api/v1/opportunities/{id}:
+    get:
+      tags:
+      - Opportunities
+      summary: "Detalle de una oportunidad, con cliente, salón y etapa resueltos (BE-OPP-03)"
+      operationId: getById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityDetailResponse"
+        "404":
+          description: No existe una oportunidad con ese id
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityDetailResponse"
+    put:
+      tags:
+      - Opportunities
+      summary: "Edita una oportunidad abierta (no cambia etapa, responsable ni estado)"
+      operationId: update
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOpportunityRequest"
+        required: true
+      responses:
+        "200":
+          description: Oportunidad actualizada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "404":
+          description: No existe una oportunidad con ese id
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "409":
+          description: La oportunidad está cerrada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+  /api/v1/contacts/{id}:
+    get:
+      tags:
+      - Contacts
+      summary: Detalle de un contacto
+      operationId: getById_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactDetailResponse"
+        "404":
+          description: No existe un contacto con ese id
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactDetailResponse"
+    put:
+      tags:
+      - Contacts
+      summary: Edita un contacto
+      operationId: update_1
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactRequest"
+        required: true
+      responses:
+        "200":
+          description: Contacto actualizado
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "404":
+          description: "No existe un contacto con ese id, o la empresa relacionada\
+            \ no existe"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "409":
+          description: Ya existe un contacto con ese documento
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+  /api/v1/companies/{id}:
+    get:
+      tags:
+      - Companies
+      summary: "Detalle de una empresa, con sus contactos (BE-CUS-03)"
+      operationId: getById_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyDetailResponse"
+        "404":
+          description: No existe una empresa con ese id
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyDetailResponse"
+    put:
+      tags:
+      - Companies
+      summary: Edita una empresa
+      operationId: update_2
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyRequest"
+        required: true
+      responses:
+        "200":
+          description: Empresa actualizada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyResponse"
+        "404":
+          description: No existe una empresa con ese id
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyResponse"
+        "409":
+          description: Ya existe una empresa con ese CUIT
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyResponse"
+  /api/v1/opportunities:
+    get:
+      tags:
+      - Opportunities
+      summary: "Lista oportunidades del tenant, paginado"
+      operationId: list
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageResponseOpportunityResponse"
+    post:
+      tags:
+      - Opportunities
+      summary: Crea una oportunidad
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOpportunityRequest"
+        required: true
+      responses:
+        "201":
+          description: Oportunidad creada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "400":
+          description: Datos inválidos
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "404":
+          description: "La empresa, el contacto, el salón o la etapa relacionados\
+            \ no existen"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "422":
+          description: "Falta empresa/contacto, o la etapa inicial no está abierta"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+  /api/v1/opportunities/{id}/stage:
+    post:
+      tags:
+      - Opportunities
+      summary: Cambia la etapa de una oportunidad abierta y registra el historial
+        (BE-OPP-05)
+      operationId: changeStage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeStageRequest"
+        required: true
+      responses:
+        "200":
+          description: Etapa cambiada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "404":
+          description: No existe la oportunidad o la etapa destino
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "409":
+          description: La oportunidad está cerrada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+        "422":
+          description: "Misma etapa, o etapa destino no abierta (usar /win o /lose)"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityResponse"
+  /api/v1/contacts:
+    get:
+      tags:
+      - Contacts
+      summary: "Lista contactos del tenant, paginado"
+      operationId: list_1
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageResponseContactResponse"
+    post:
+      tags:
+      - Contacts
+      summary: Crea un contacto
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactRequest"
+        required: true
+      responses:
+        "201":
+          description: Contacto creado
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "400":
+          description: Datos inválidos
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "404":
+          description: La empresa relacionada no existe
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "409":
+          description: Ya existe un contacto con ese documento
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+  /api/v1/companies:
+    get:
+      tags:
+      - Companies
+      summary: "Lista empresas del tenant, paginado"
+      operationId: list_2
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PageResponseCompanyResponse"
+    post:
+      tags:
+      - Companies
+      summary: Crea una empresa
+      operationId: create_2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyRequest"
+        required: true
+      responses:
+        "201":
+          description: Empresa creada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyResponse"
+        "400":
+          description: Datos inválidos
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyResponse"
+        "409":
+          description: Ya existe una empresa con ese CUIT
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CompanyResponse"
+  /api/v1/auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Inicia sesión y devuelve un JWT
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: Login exitoso
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Datos de la solicitud inválidos
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Credenciales inválidas
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+      security: []
+  /api/v1/venues:
+    get:
+      tags:
+      - Venues
+      summary: Lista los salones del tenant
+      operationId: list_3
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VenueResponse"
+  /api/v1/venues/{id}:
+    get:
+      tags:
+      - Venues
+      summary: Detalle de un salón
+      operationId: getById_3
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/VenueResponse"
+        "404":
+          description: No existe un salón con ese id
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/VenueResponse"
+  /api/v1/stages:
+    get:
+      tags:
+      - Stages
+      summary: "Lista las etapas del tenant, ordenadas por posición"
+      operationId: list_4
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StageResponse"
+  /api/v1/opportunities/board:
+    get:
+      tags:
+      - Opportunities
+      summary: "Oportunidades agrupadas por etapa, una columna por etapa (BE-OPP-06)"
+      operationId: board
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OpportunityBoardResponse"
+  /api/v1/event-services:
+    get:
+      tags:
+      - EventServices
+      summary: Lista los servicios adicionales del tenant
+      operationId: list_5
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventServiceResponse"
+  /api/v1/event-services/{id}:
+    get:
+      tags:
+      - EventServices
+      summary: Detalle de un servicio adicional
+      operationId: getById_4
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventServiceResponse"
+        "404":
+          description: No existe un servicio con ese id
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/EventServiceResponse"
+components:
+  schemas:
+    UpdateOpportunityRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+        companyId:
+          type: integer
+          format: int64
+        contactId:
+          type: integer
+          format: int64
+        venueId:
+          type: integer
+          format: int64
+        estimatedValue:
+          type: number
+        probability:
+          type: integer
+          format: int32
+          maximum: 100
+          minimum: 0
+        eventDate:
+          type: string
+          format: date-time
+        attendeeCount:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+        estimatedCloseDate:
+          type: string
+          format: date
+        originId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+      required:
+      - attendeeCount
+      - eventDate
+      - title
+      - venueId
+    OpportunityResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        companyId:
+          type: integer
+          format: int64
+        contactId:
+          type: integer
+          format: int64
+        salesRepId:
+          type: integer
+          format: int64
+        venueId:
+          type: integer
+          format: int64
+        stageId:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - ABIERTA
+          - GANADA
+          - PERDIDA
+        estimatedValue:
+          type: number
+        eventDate:
+          type: string
+          format: date-time
+        attendeeCount:
+          type: integer
+          format: int32
+    ContactRequest:
+      type: object
+      properties:
+        companyId:
+          type: integer
+          format: int64
+          description: Id de la empresa relacionada. Vacío si es cliente individual
+            (Módulo 1 de la consigna).
+        firstName:
+          type: string
+          example: María
+          minLength: 1
+        lastName:
+          type: string
+          example: Gómez
+          minLength: 1
+        document:
+          type: string
+          description: Opcional
+          example: "30123456"
+        position:
+          type: string
+          description: "Cargo, si corresponde"
+          example: Responsable de compras
+        email:
+          type: string
+          format: email
+          example: maria.gomez@empresa.com
+        phone:
+          type: string
+          example: +54 11 4000-0000
+        status:
+          type: string
+          enum:
+          - POTENCIAL
+          - CLIENTE
+          - INACTIVO
+          - NO_CONTACTAR
+        salesRepId:
+          type: integer
+          format: int64
+          description: "Id del usuario responsable comercial, si ya está asignado"
+        originId:
+          type: integer
+          format: int64
+          description: Id del origen comercial
+        notes:
+          type: string
+      required:
+      - firstName
+      - lastName
+      - status
+    ContactResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        companyId:
+          type: integer
+          format: int64
+        companyName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+          enum:
+          - POTENCIAL
+          - CLIENTE
+          - INACTIVO
+          - NO_CONTACTAR
+    CompanyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Eventos del Sur SA
+          minLength: 1
+        cuit:
+          type: string
+          description: "Opcional. Formato: 11 dígitos, con o sin guiones."
+          example: 30-71234567-9
+        industry:
+          type: string
+          example: Turismo y eventos
+        email:
+          type: string
+          format: email
+          example: contacto@eventosdelsur.com
+        phone:
+          type: string
+          example: +54 11 4000-0000
+        address:
+          type: string
+          example: "Av. Rivadavia 4500, San Justo"
+        website:
+          type: string
+          example: https://eventosdelsur.com
+        status:
+          type: string
+          enum:
+          - POTENCIAL
+          - CLIENTE
+          - INACTIVO
+          - NO_CONTACTAR
+        salesRepId:
+          type: integer
+          format: int64
+          description: "Id del usuario responsable comercial, si ya está asignado"
+        originId:
+          type: integer
+          format: int64
+          description: Id del origen comercial
+        notes:
+          type: string
+      required:
+      - name
+      - status
+    CompanyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        cuit:
+          type: string
+        industry:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+          enum:
+          - POTENCIAL
+          - CLIENTE
+          - INACTIVO
+          - NO_CONTACTAR
+        salesRepId:
+          type: integer
+          format: int64
+    CreateOpportunityRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Evento de fin de año - Empresa X
+          minLength: 1
+        companyId:
+          type: integer
+          format: int64
+          description: Empresa relacionada. Al menos una de companyId/contactId es
+            obligatoria.
+        contactId:
+          type: integer
+          format: int64
+          description: Contacto relacionado. Al menos una de companyId/contactId es
+            obligatoria.
+        salesRepId:
+          type: integer
+          format: int64
+          description: Usuario responsable comercial (RN-01 de la consigna)
+        venueId:
+          type: integer
+          format: int64
+        stageId:
+          type: integer
+          format: int64
+          description: Etapa inicial — debe ser una etapa abierta (DP-06)
+        estimatedValue:
+          type: number
+        probability:
+          type: integer
+          format: int32
+          maximum: 100
+          minimum: 0
+        eventDate:
+          type: string
+          format: date-time
+        attendeeCount:
+          type: integer
+          format: int32
+          exclusiveMinimum: 0
+        estimatedCloseDate:
+          type: string
+          format: date
+        originId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+      required:
+      - attendeeCount
+      - eventDate
+      - salesRepId
+      - stageId
+      - title
+      - venueId
+    ChangeStageRequest:
+      type: object
+      properties:
+        stageId:
+          type: integer
+          format: int64
+          description: Etapa destino — debe ser una etapa abierta
+        note:
+          type: string
+          description: Observación opcional sobre el cambio
+      required:
+      - stageId
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email del usuario
+          example: admin@ztech.local
+          minLength: 1
+        password:
+          type: string
+          description: "Contraseña en texto plano, sólo para este request"
+          example: Admin123!
+          minLength: 1
+      required:
+      - email
+      - password
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: "JWT a enviar como 'Authorization: Bearer <token>' en el resto\
+            \ de los requests"
+        tokenType:
+          type: string
+          description: Tipo de token
+          example: Bearer
+        expiresInSeconds:
+          type: integer
+          format: int64
+          description: Segundos hasta que el token expira
+          example: 28800
+        user:
+          $ref: "#/components/schemas/UserSummary"
+          description: "Datos mínimos del usuario autenticado, para que el frontend\
+            \ no tenga que decodificar el JWT"
+    UserSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        role:
+          type: string
+    VenueResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        capacity:
+          type: integer
+          format: int32
+        rate:
+          type: number
+        address:
+          type: string
+        active:
+          type: boolean
+    StageResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        position:
+          type: integer
+          format: int32
+        kind:
+          type: string
+          enum:
+          - OPEN
+          - WON
+          - LOST
+        active:
+          type: boolean
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    PageResponseOpportunityResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpportunityResponse"
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    CompanySummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    ContactSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+          enum:
+          - POTENCIAL
+          - CLIENTE
+          - INACTIVO
+          - NO_CONTACTAR
+    OpportunityDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        company:
+          $ref: "#/components/schemas/CompanySummaryResponse"
+        contact:
+          $ref: "#/components/schemas/ContactSummaryResponse"
+        salesRepId:
+          type: integer
+          format: int64
+        venue:
+          $ref: "#/components/schemas/VenueResponse"
+        stage:
+          $ref: "#/components/schemas/StageResponse"
+        status:
+          type: string
+          enum:
+          - ABIERTA
+          - GANADA
+          - PERDIDA
+        estimatedValue:
+          type: number
+        finalValue:
+          type: number
+        probability:
+          type: integer
+          format: int32
+        eventDate:
+          type: string
+          format: date-time
+        attendeeCount:
+          type: integer
+          format: int32
+        estimatedCloseDate:
+          type: string
+          format: date
+        closedAt:
+          type: string
+          format: date-time
+        originId:
+          type: integer
+          format: int64
+        lossReasonId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+    OpportunityBoardResponse:
+      type: object
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: "#/components/schemas/StageColumn"
+    StageColumn:
+      type: object
+      properties:
+        stageId:
+          type: integer
+          format: int64
+        stageName:
+          type: string
+        opportunities:
+          type: array
+          items:
+            $ref: "#/components/schemas/OpportunityResponse"
+    EventServiceResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        active:
+          type: boolean
+    PageResponseContactResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactResponse"
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    ContactDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        company:
+          $ref: "#/components/schemas/CompanySummaryResponse"
+        firstName:
+          type: string
+        lastName:
+          type: string
+        document:
+          type: string
+        position:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+          enum:
+          - POTENCIAL
+          - CLIENTE
+          - INACTIVO
+          - NO_CONTACTAR
+        salesRepId:
+          type: integer
+          format: int64
+        originId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+    PageResponseCompanyResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/CompanyResponse"
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    CompanyDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        cuit:
+          type: string
+        industry:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        website:
+          type: string
+        status:
+          type: string
+          enum:
+          - POTENCIAL
+          - CLIENTE
+          - INACTIVO
+          - NO_CONTACTAR
+        salesRepId:
+          type: integer
+          format: int64
+        originId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        contacts:
+          type: array
+          items:
+            $ref: "#/components/schemas/ContactSummaryResponse"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      name: bearerAuth
+      scheme: bearer
+      bearerFormat: JWT
