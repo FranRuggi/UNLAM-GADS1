@@ -31,7 +31,36 @@ Publicado en **Vercel** con integración de GitHub. La configuración vive en `v
 
 En Vercel, **Root Directory tiene que ser `frontend`**, porque el repositorio es un monorepo.
 
-`public/_redirects` es el equivalente para Cloudflare Pages y Vercel lo ignora. Conviven hasta que se cierre `DF-09` (ver `docs/decisiones/decisiones-frontend.md`).
+### Mientras el frontend viva en una rama
+
+Hasta que `frontend/` llegue a `main`, la maqueta se publica como **previsualización de rama**. Cada push a `feature/frontend` genera un despliegue, y su URL es estable: siempre apunta al último despliegue de esa rama.
+
+```text
+https://<proyecto>-git-feature-frontend-<scope>.vercel.app
+```
+
+La URL exacta está en la pestaña **Deployments** del proyecto. No hace falta tocar la rama de producción para usarla.
+
+### Builds de main que fallan
+
+Vercel usa `main` como rama de producción y `main` todavía no tiene `frontend/`, así que **cada push a `main` dispara un build que falla** con `The specified Root Directory "frontend" does not exist`. No rompe nada, pero le llega un mail de error a todo el equipo.
+
+Dos formas de cortarlo, cualquiera sirve:
+
+- **Settings → Environments → Production → Branch Tracking**: apuntar producción a `feature/frontend`. En cuentas más viejas el ajuste está en **Settings → Git → Production Branch**.
+- **Settings → Git → Ignored Build Step**: poner el comando
+
+  ```bash
+  git diff --quiet HEAD^ HEAD -- .
+  ```
+
+  Vercel salta el build cuando ese comando devuelve 0, es decir cuando el commit no tocó el Root Directory. Es lo habitual en un monorepo y conviene dejarlo puesto aunque después se resuelva lo otro.
+
+Cuando `frontend/` llegue a `main`, la rama de producción vuelve a ser `main` y esto deja de aplicar.
+
+### Cloudflare
+
+`public/_redirects` es el equivalente de `vercel.json` para Cloudflare Pages y Vercel lo ignora. Conviven hasta que se cierre `DF-09` (ver `docs/decisiones/decisiones-frontend.md`).
 
 ## Estructura
 

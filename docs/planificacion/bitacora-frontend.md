@@ -75,7 +75,8 @@ Registro breve de lo que se fue haciendo en la rama `feature/frontend`. Una lín
 - El dominio dejó de estar escrito a mano en tres archivos: ahora sale de `VITE_SITE_URL`, con respaldo automático en `VERCEL_PROJECT_PRODUCTION_URL` y en localhost.
 - `robots.txt` y `sitemap.xml` dejaron de versionarse; los genera un plugin de `vite.config.ts` durante el build, a partir de esa misma URL.
 - Registrada la desviación de hosting respecto de la arquitectura aprobada (`DF-09`) y actualizado `DF-04`.
-- Rama `feature/frontend` publicada en GitHub para que Vercel la tome como previsualización. `main` queda intacto.
+- Rama `feature/frontend` publicada en GitHub para que Vercel la tome como previsualización. `main` queda intacto: hay seis personas trabajando sobre esa rama y un merge ahora sería disruptivo.
+- Documentado en `frontend/README.md` el efecto colateral: como Vercel tiene `main` de producción y `main` no contiene `frontend/`, cada push a `main` dispara un build que falla. Se corta apuntando producción a la rama o, mejor para un monorepo, con un Ignored Build Step.
 
 ## Pendiente para la próxima sesión
 
