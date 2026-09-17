@@ -7,18 +7,20 @@ Sigue los hitos de `docs/planificacion/plan-de-desarrollo.md` y la estrategia de
 vertical (migración → dominio → service → controller → tests). Cada tarea referencia el
 requisito (`requirements.md`) y la sección de diseño (`design.md`) que cubre.
 
-> ## 📍 Punto de retomada (última actualización: 12/09/2026)
+> ## 📍 Punto de retomada (última actualización: 14/09/2026)
 >
-> **Fases 0-4 completas y verificadas** — Entrega 1 (24/09) funcionalmente lista:
-> login, empresas/contactos, salones/servicios/etapas (lectura), oportunidades, embudo
-> con cambio de etapa. **34/34 tests pasando** (`./mvnw verify` desde `backend/`, con
-> Docker Desktop corriendo). Documentación de E1 (README, OpenAPI, diagramas, Postman)
-> también completa — ver la sección después de la Fase 4.
+> **Fases 0-4 completas y estabilización post-E1 en curso.** V3 agrega contraseña
+> temporal/revocación, responsables obligatorios, datos ampliados de empresas y salones,
+> tipos de evento, rango horario, servicios N:N y exclusión GiST. El frontend ya tiene
+> cliente HTTP, tipos OpenAPI, sesión, guardas, login, cambio de clave y empresas reales.
+> BE-SEC-06 ya aplica alcance de vendedor. V4 agrega un escenario comercial compacto.
+> Se adelantaron las lecturas de actividades e historial y los filtros de DP-10 para
+> integrar todas las rutas privadas del frontend con la API.
 >
-> **Falta**: deploy en Render (lo gestiona el usuario) y todo desde la **Fase 5** en
-> adelante. Antes de arrancar la Fase 5, resolver con el usuario las decisiones DP-01,
-> DP-02, DP-03 (resto), DP-04, DP-08 y DP-10 —
-> `docs/decisiones/decisiones-pendientes.md`.
+> **Validación de este corte:** `./mvnw.cmd clean verify` pasó 38/38 pruebas
+> (5 unitarias + 33 IT) con PostgreSQL 16. Incluye Flyway V1–V3 desde base vacía,
+> `MigrationV3IT` para el salto V2→V3 con registros legacy y `SellerScopeIT` para
+> alcance comercial y acceso cruzado. Frontend: 6/6 pruebas, lint y build en verde.
 >
 > **Sin commits ni pushes**: el usuario pidió explícitamente no hacer ninguno en este
 > proyecto salvo que lo pida de nuevo.
@@ -368,25 +370,34 @@ funcionando y testeable — verificado por los dos caminos, no asumido.
 
 ## Fase 5 — Estabilización (post-E1, hacia 02/10)
 
-- [ ] Cerrar DP-01, DP-02, DP-03 (resto), DP-04, DP-08, DP-10 con el usuario
+- [x] Cerrar DP-01, DP-02, DP-03 (resto), DP-04, DP-08, DP-10 con el usuario
 - [ ] Corregir defectos detectados en la demo de E1
-- [ ] BE-CUS-08: baja lógica por cambio de estado, con test de que no rompe relaciones
-- [ ] BE-SEC-06: alcance del `SELLER` una vez resuelto DP-02
+- [x] BE-CUS-08: baja lógica por cambio de estado; falta ampliar el test histórico
+- [x] BE-SEC-06: alcance del `SELLER` según DP-02. Listados e ids directos de empresas,
+      contactos, oportunidades y tablero respetan asignación; los clientes relacionados
+      por una oportunidad propia son de sólo lectura. `CustomerVisibilityPort` invierte
+      la dependencia y evita acoplar `customers` a tablas de `opportunities`.
+- [x] `SellerScopeIT`: cubre asignaciones directas, relaciones por oportunidad,
+      exclusión de contactos hermanos, `404` en lectura/escritura fuera de alcance,
+      oportunidades ajenas y acceso directo a otro tenant.
 
 ## Fase 6 — Seguridad y maestros EF (hacia 13/10)
 
-- [ ] BE-ACC-02/03/04: ABM de usuarios, sólo `ADMIN`
-- [ ] BE-SEC-05: `@PreAuthorize` por rol en todos los endpoints administrativos
+- [x] BE-ACC-02/03/04: alta, listado, detalle, edición, baja lógica y reset de usuarios
+      sólo `ADMIN`; cubierto por `UserControllerIT`
+- [x] BE-SEC-05: autorización por métodos activada y aplicada al módulo de usuarios
+- [x] BE-ACC-05: cambio obligatorio de contraseña y revocación por `auth_version`,
+      cubierto por `PasswordChangeIT`
 - [ ] BE-OFF-02/04: ABM completo de `Venue` y `EventService`
 - [ ] BE-CAT-02/03/04/05: ABM de los cuatro catálogos configurables
 - [ ] Tests negativos de rol para cada endpoint administrativo nuevo
 
 ## Fase 7 — Flujo comercial EF (hacia 25/10)
 
-- [ ] Entidad `Activity` (`activities/domain/`) — design §3.11
+- [x] Entidad `Activity` (`activities/domain/`) — design §3.11
 - [ ] `ActivityController`/`Service`: BE-ACT-01
-- [ ] Endpoints de historial cronológico: BE-ACT-02, en empresa/contacto/oportunidad
-- [ ] `GET /api/v1/opportunities/{id}/stage-history`: BE-ACT-03
+- [x] Lectura paginada de actividades y endpoints cronológicos por empresa/contacto/oportunidad (BE-ACT-02). El alta BE-ACT-01 sigue pendiente.
+- [x] `GET /api/v1/opportunities/{id}/stage-history`: BE-ACT-03; el alta de oportunidad registra su etapa inicial.
 - [ ] `WinOpportunityService`, `LoseOpportunityService` — design §9.2 (BE-OPP-07/08)
 - [ ] BE-OPP-09: bloqueo de edición sobre oportunidad cerrada + caso de uso de reapertura
       (según resolución de DP-01)
@@ -395,9 +406,11 @@ funcionando y testeable — verificado por los dos caminos, no asumido.
 
 ## Fase 8 — Especialización completa (hacia 04/11)
 
-- [ ] Resolver DP-07 (semántica temporal) antes de esta fase
-- [ ] Migración: restricción de exclusión GiST sobre `opportunities` — design §3.9
-- [ ] BE-OPP-10: validación de capacidad del salón (DP-08 define si es dura o informativa)
+- [x] Resolver DP-07 (semántica temporal)
+- [x] Migración V3: restricción de exclusión GiST sobre `opportunities` — design §3.9
+- [x] `MigrationV3IT`: backfill desde esquema detenido en V2 (nombres, responsables,
+      fechas y tipo de evento) sin pérdida de datos
+- [x] BE-OPP-10: validación de capacidad del salón; advertencia UI separada para >50
 - [ ] BE-OPP-11: validación de aplicación + traducción de violación GiST a `409` — design §9.3
 - [ ] Test de concurrencia con Testcontainers: dos confirmaciones simultáneas, una sola
       tiene éxito
@@ -405,12 +418,12 @@ funcionando y testeable — verificado por los dos caminos, no asumido.
 
 ## Fase 9 — Candidato final (hacia 09/11)
 
-- [ ] BE-CUS-09, BE-OPP-12: filtros y búsqueda con `Specification` — design §8
-- [ ] Paginación consistente en todos los listados
+- [x] BE-CUS-09, BE-OPP-12: filtros y búsqueda con `Specification` — design §8
+- [x] Paginación consistente, máximo 100 y orden validado en listados comerciales
 - [ ] Revisión de accesibilidad básica de las respuestas de error (mensajes usables)
 - [ ] Observabilidad: logs con `requestId`/`userId`/`tenantId`, sin datos sensibles
 - [ ] Regresión completa de los 17 casos de uso mínimos de la consigna
-- [ ] `backend/docs/openapi.yaml` actualizado y coherente con el frontend
+- [x] `backend/docs/openapi.yaml` actualizado y cliente TypeScript regenerado
 
 ## Fase 10 — Documentación y artefactos de entrega (BE-DOC-02..07)
 

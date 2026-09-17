@@ -64,6 +64,8 @@ REFERENCES tenants(id)`. Tipos de fecha/hora en `timestamptz`. Moneda: `NUMERIC(
 | first_name / last_name | text not null | |
 | role | text not null | `ADMIN` \| `SELLER` \| `SALES_MANAGER` |
 | active | boolean not null default true | baja lógica |
+| must_change_password | boolean not null default false | limita la sesión al cambio de clave |
+| auth_version | bigint not null default 0 | invalida JWT anteriores ante cambios sensibles |
 | created_at, created_by, updated_at, updated_by | auditoría | ver `AuditableEntity` |
 
 ### 3.3 `companies`
@@ -71,15 +73,17 @@ REFERENCES tenants(id)`. Tipos de fecha/hora en `timestamptz`. Moneda: `NUMERIC(
 |---|---|---|
 | id | bigint identity PK | |
 | tenant_id | bigint not null FK | |
-| name | text not null | |
+| business_name | text not null | nombre comercial; recibe el `name` histórico |
+| legal_name | text not null | razón social; recibe el `name` histórico en el backfill |
 | cuit | text null | `UNIQUE (tenant_id, cuit)` con índice parcial `WHERE cuit IS NOT NULL` |
 | industry | text null | |
 | email | text null | formato validado, no único |
 | phone | text null | |
 | address | text null | |
+| locality | text null | |
 | website | text null | |
 | status | text not null | `POTENCIAL` \| `CLIENTE` \| `INACTIVO` \| `NO_CONTACTAR` |
-| sales_rep_id | bigint null FK → users | responsable comercial |
+| sales_rep_id | bigint not null FK → users | responsable comercial obligatorio |
 | origin_id | bigint null FK → origins | |
 | notes | text null | |
 | auditoría | | |
@@ -95,7 +99,7 @@ REFERENCES tenants(id)`. Tipos de fecha/hora en `timestamptz`. Moneda: `NUMERIC(
 | position | text null | cargo |
 | email, phone | text null | |
 | status | text not null | mismo dominio que `companies.status` |
-| sales_rep_id | bigint null FK → users | |
+| sales_rep_id | bigint not null FK → users | hereda el de la empresa o usuario actual |
 | origin_id | bigint null FK → origins | |
 | notes | text null | |
 | auditoría | | |
@@ -109,7 +113,10 @@ REFERENCES tenants(id)`. Tipos de fecha/hora en `timestamptz`. Moneda: `NUMERIC(
 | capacity | integer not null | check `capacity > 0` |
 | rate | numeric(15,2) null | tarifa |
 | address | text null | |
-| active | boolean not null default true | |
+| locality | text null | |
+| description | text null | |
+| equipment | text[] not null default '{}' | equipamiento incluido |
+| status | text not null | `DISPONIBLE` \| `MANTENIMIENTO` \| `INACTIVO` |
 | auditoría | | |
 
 ### 3.6 `event_services`
@@ -133,7 +140,7 @@ REFERENCES tenants(id)`. Tipos de fecha/hora en `timestamptz`. Moneda: `NUMERIC(
 | kind | text not null | `OPEN` \| `WON` \| `LOST` |
 | active | boolean not null default true | |
 
-### 3.8 `activity_types`, `origins`, `loss_reasons`
+### 3.8 `activity_types`, `origins`, `loss_reasons`, `event_types`
 Mismo patrón simple: `id`, `tenant_id`, `name`, `active`. `UNIQUE (tenant_id, name)` en
 cada uno.
 
@@ -147,12 +154,13 @@ cada uno.
 | contact_id | bigint null FK → contacts | check: `company_id IS NOT NULL OR contact_id IS NOT NULL` |
 | sales_rep_id | bigint not null FK → users | responsable |
 | venue_id | bigint not null FK → venues | un solo salón (DP-09) |
+| event_type_id | bigint not null FK → event_types | tipo de evento configurable |
 | stage_id | bigint not null FK → stages | etapa actual |
 | status | text not null | `ABIERTA` \| `GANADA` \| `PERDIDA` |
 | estimated_value | numeric(15,2) null | |
 | final_value | numeric(15,2) null | obligatorio si `status = GANADA` |
 | probability | integer null | 0–100, opcional |
-| event_date | timestamptz not null | desde E1 (DP-09) |
+| event_start / event_end | timestamptz not null | rango `[inicio, fin)`; instantes persistidos en UTC |
 | attendee_count | integer not null | check `> 0`; validado contra `venue.capacity` en servicio |
 | estimated_close_date | date null | |
 | closed_at | timestamptz null | obligatorio si `status <> ABIERTA` |
@@ -169,11 +177,14 @@ ALTER TABLE opportunities ADD CONSTRAINT no_overlapping_won_reservation
   EXCLUDE USING gist (
     tenant_id WITH =,
     venue_id WITH =,
-    tstzrange(event_date, event_date + interval '1 day') WITH &&
+    tstzrange(event_start, event_end, '[)') WITH &&
   ) WHERE (status = 'GANADA');
 ```
-(La forma exacta del rango —día completo vs. horario preciso, extremos contiguos— depende
-de la resolución de DP-07; este es el placeholder de diseño.)
+Los extremos contiguos no se superponen. La captura y presentación usa
+`America/Argentina/Buenos_Aires`; PostgreSQL conserva los instantes normalizados.
+
+La relación `opportunity_event_services` asocia oportunidades y servicios mediante
+sus dos identificadores. No persiste cantidad ni precio histórico (DP-05).
 
 ### 3.10 `stage_history`
 | Columna | Tipo | Notas |
@@ -266,6 +277,11 @@ no a `VenueRepository` directamente.
   rol en cada método de `service` (no sólo en el controller).
 - Filtrado por tenant: cada `Repository` de negocio declara sus métodos con
   `AndTenantId`, y cada `Service` obtiene el tenant de `TenantContext`, nunca de un DTO.
+- Alcance de `SELLER`: oportunidades por `salesRepId`; clientes por asignación directa
+  o por relación con una oportunidad propia. `customers` consulta estas relaciones a
+  través de `CustomerVisibilityPort`, implementado por `OpportunityAccessService`, sin
+  depender del repositorio ni del dominio de `opportunities`. La escritura de clientes
+  exige siempre asignación directa y todo recurso fuera del alcance devuelve `404`.
 - `PasswordEncoder`: `BCryptPasswordEncoder` (cost 10).
 - CORS: orígenes permitidos desde variable de entorno (`CORS_ALLOWED_ORIGINS`),
   configurado en `CorsConfig`.

@@ -6,7 +6,7 @@ CRM **especializado en salones de eventos corporativos**. Monorepo, monolito mod
 ## Alcance de cada sesión
 
 - `backend/`: API REST en Java + Spring Boot.
-- `frontend/`: SPA prevista en React + TS + Vite; todavía no existe en este checkout.
+- `frontend/`: SPA React + TypeScript + Vite integrada con la API para las rutas privadas actuales.
 - El usuario asigna el alcance de cada sesión, independientemente del asistente.
   Si hay trabajo paralelo, respetar las carpetas asignadas y coordinar cambios de contrato.
 - El contrato compartido es **`backend/docs/openapi.yaml`**, exportado del backend.
@@ -54,7 +54,7 @@ backend/src/main/java/com/ztech/crm/
 ├── offerings/        # Venue (salón) y EventService — el "producto o servicio" de la consigna
 ├── catalogs/         # Stage, ActivityType, Origin, LossReason
 ├── opportunities/    # Opportunity, StageHistory, reserva del salón
-└── activities/       # Activity — previsto para Fase 7, aún no implementado
+└── activities/       # Activity — lectura global y por asociaciones; alta pendiente
 ```
 
 Cada módulo de negocio tiene adentro:
@@ -80,11 +80,16 @@ Migraciones: `backend/src/main/resources/db/migration/V1__initial_schema.sql`, e
 `requirements.md`/`design.md`/`tasks.md` (`docs/specs-backend/`) ya fueron aprobados
 por el usuario e implementación arrancó — no son un borrador esperando luz verde.
 
-**Estado registrado el 12/09/2026**: Fases 0-4 del backend
-hechas (login, empresas/contactos, salones/servicios/etapas de lectura, oportunidades,
-embudo con cambio de etapa). La sesión anterior registró 34/34 tests pasando.
+**Estado registrado el 14/09/2026**: Fases 0-4 hechas y estabilización post-E1 en curso.
+V3 incorpora seguridad de contraseña temporal, responsables obligatorios, modelo
+ampliado de empresas/salones/oportunidades, tipos de evento, servicios asociados y la
+restricción GiST. V4 agrega un seed comercial coherente. El backend ya aplica el alcance
+comercial de `SELLER` a clientes, oportunidades, tablero y actividades mediante puertos
+entre módulos; expone filtros DP-10, catálogos de lectura e historial de etapas. El
+frontend autentica contra la API, conserva sesión, fuerza el cambio inicial de clave e
+integra todas las rutas privadas conservadas sin datos comerciales en memoria.
 El deploy y la validación en Render siguen pendientes, a cargo del usuario; también
-quedan pruebas de acceso cruzado entre tenants y las tareas desde Fase 5.
+quedan pruebas de acceso cruzado para los demás módulos y el resto de tareas desde Fase 5.
 Consultar `tasks.md` y ejecutar los checks pertinentes antes de afirmar el estado actual.
 
 **Para retomar**: abrir `docs/specs-backend/tasks.md` — tiene el detalle exacto de
@@ -125,9 +130,10 @@ ningún momento de este proyecto, salvo que lo pida de nuevo explícitamente.
 Una oportunidad `ABIERTA` sólo puede estar en una etapa `OPEN`. Pasar a `WON`/`LOST` cierra
 la oportunidad y exige fecha real de cierre (y motivo de pérdida si es `LOST`).
 
-**Oportunidad** (DP-09): **un solo salón** (`venue_id`, no N:N). Desde E1 lleva
-`event_date` y `attendee_count`. Capacidad y reserva con exclusión GiST llegan el 04/11
-sobre esas mismas columnas. Los `EventService` asociados quedan para después de E1.
+**Oportunidad** (DP-05/07/09): **un solo salón** (`venue_id`, no N:N), rango
+`[event_start,event_end)`, tipo de evento obligatorio y `attendee_count`. V3 ya agrega
+la asociación N:N simple con `EventService`, la validación de capacidad y la exclusión
+GiST para reservas ganadas; falta integrar el caso de uso de cierre y su concurrencia.
 
 **Producto o servicio** (ADR-004): módulo `offerings/` con `Venue` (salón: capacidad,
 tarifa, se reserva) y `EventService` (catering, audio, decoración: precio, no se reserva).

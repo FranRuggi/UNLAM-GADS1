@@ -69,6 +69,10 @@ function seoEstatico(urlSitio: string): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
+  if (env.VERCEL && !env.VITE_API_URL) {
+    throw new Error("VITE_API_URL es obligatoria en los builds publicados en Vercel.");
+  }
+
   // En Vercel, VERCEL_PROJECT_PRODUCTION_URL trae el dominio de producción del
   // proyecto sin protocolo. Sirve de respaldo si no se definió VITE_SITE_URL.
   const urlSitio = (
@@ -82,6 +86,9 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), seoEstatico(urlSitio)],
     define: {
       "import.meta.env.VITE_SITE_URL": JSON.stringify(urlSitio),
+      "import.meta.env.VITE_API_URL": JSON.stringify(
+        env.VITE_API_URL?.replace(/\/$/, "") || "http://localhost:8080/api/v1",
+      ),
     },
   };
 });

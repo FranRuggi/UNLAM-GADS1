@@ -89,6 +89,30 @@
   pointer-events: none;
 }
 
+.filtroFecha {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  font-size: var(--texto-xs);
+  color: var(--tinta-500);
+}
+
+.filtroFecha input {
+  height: 36px;
+  padding-inline: var(--e-3);
+  background: var(--papel);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: var(--radio-md);
+  font: inherit;
+  color: var(--tinta-700);
+}
+
+.filtroFecha input:focus {
+  outline: none;
+  border-color: var(--marca-violeta);
+  box-shadow: var(--anillo-foco);
+}
+
 .conteo {
   font-size: var(--texto-sm);
   color: var(--tinta-500);

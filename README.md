@@ -6,15 +6,16 @@ CRM especializado en la gestión comercial de **salones de eventos corporativos*
 
 | Entrega | Fecha | Estado |
 |---|---|---|
-| Maqueta de frontend | 24/09/2026 | En curso, rama `feature/frontend` |
-| Entrega 1 | 24/09/2026 | Pendiente de backend |
+| Integración frontend/backend | 24/09/2026 | Implementada; validación manual desplegada pendiente |
+| Entrega 1 | 24/09/2026 | Backend y frontend integrados; recorrido desplegado pendiente |
 | Entrega final | 12/11/2026 | Pendiente |
 
 ## Estructura del repositorio
 
 ```text
 UNLAM-GADS1/
-├── frontend/   Aplicación React + TypeScript + Vite (hoy, maqueta sin backend)
+├── frontend/   React + TypeScript + Vite; autenticación y pantallas comerciales integradas
+├── backend/    API Java 25 + Spring Boot + PostgreSQL/Flyway
 └── docs/       Arquitectura, planificación, decisiones y archivos de marca
 ```
 
@@ -25,6 +26,9 @@ cd frontend
 npm install
 npm run dev
 ```
+
+La API debe estar disponible en `VITE_API_URL`; en desarrollo se usa
+`http://localhost:8080/api/v1` si la variable no está definida.
 
 Detalle en [`frontend/README.md`](frontend/README.md).
 

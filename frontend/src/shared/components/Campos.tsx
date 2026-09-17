@@ -10,6 +10,7 @@ import css from "./Campos.module.css";
 type PropsCampo = {
   etiqueta: string;
   ayuda?: string;
+  error?: string;
   requerido?: boolean;
   /** Ocupa las dos columnas de la grilla del formulario. */
   ancho?: boolean;
@@ -23,12 +24,15 @@ type PropsCampo = {
 export function Campo({
   etiqueta,
   ayuda,
+  error,
   requerido,
   ancho,
   children,
 }: PropsCampo) {
   const id = useId();
   const idAyuda = ayuda ? `${id}-ayuda` : undefined;
+  const idError = error ? `${id}-error` : undefined;
+  const describedBy = [idAyuda, idError].filter(Boolean).join(" ") || undefined;
 
   return (
     <div className={`${css.campo} ${ancho ? css.ancho : ""}`}>
@@ -40,10 +44,15 @@ export function Campo({
           </span>
         )}
       </label>
-      {children(id, idAyuda)}
+      {children(id, describedBy)}
       {ayuda && (
         <p className={css.ayuda} id={idAyuda}>
           {ayuda}
+        </p>
+      )}
+      {error && (
+        <p className={css.error} id={idError} role="alert">
+          {error}
         </p>
       )}
     </div>

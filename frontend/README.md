@@ -1,6 +1,8 @@
 # Frontend — zTech CRM
 
-Maqueta visual navegable del CRM de salones de eventos corporativos. **No tiene backend**: no hay autenticación, ni llamadas HTTP, ni persistencia. Los datos salen de un módulo de demostración en memoria.
+Frontend React del CRM de salones de eventos corporativos. La fundación de integración
+consume el backend para autenticación, clientes, catálogos, oportunidades, embudo,
+actividades e historial. No mantiene datos comerciales privados en memoria.
 
 Alcance, no-alcance y mapa de rutas: [`docs/planificacion/plan-frontend-maqueta.md`](../docs/planificacion/plan-frontend-maqueta.md).
 Decisiones abiertas: [`docs/decisiones/decisiones-frontend.md`](../docs/decisiones/decisiones-frontend.md).
@@ -13,6 +15,8 @@ npm run dev      # http://localhost:5173
 npm run build    # verificación de tipos y build de producción
 npm run preview  # sirve el build
 npm run lint     # oxlint
+npm test         # Vitest + Testing Library
+npm run generar:api # regenera tipos desde backend/docs/openapi.yaml
 ```
 
 ## Variables de entorno
@@ -20,6 +24,7 @@ npm run lint     # oxlint
 | Variable | Para qué | Si falta |
 |---|---|---|
 | `VITE_SITE_URL` | URL absoluta del sitio, sin barra final. Alimenta el `canonical`, Open Graph, el `sitemap.xml` y el `robots.txt`. | Se usa `VERCEL_PROJECT_PRODUCTION_URL` si el build corre en Vercel; si no, `http://localhost:5173`. |
+| `VITE_API_URL` | Base versionada de la API, por ejemplo `https://api.example.com/api/v1`. | En desarrollo usa `http://localhost:8080/api/v1`; en Vercel es obligatoria. |
 
 `robots.txt` y `sitemap.xml` **no están versionados**: los genera `vite.config.ts` durante el build, para que el dominio viva en un solo lugar. Al agregar una ruta pública hay que sumarla a `RUTAS_PUBLICAS` en ese archivo.
 
@@ -58,10 +63,6 @@ Dos formas de cortarlo, cualquiera sirve:
 
 Cuando `frontend/` llegue a `main`, la rama de producción vuelve a ser `main` y esto deja de aplicar.
 
-### Cloudflare
-
-`public/_redirects` es el equivalente de `vercel.json` para Cloudflare Pages y Vercel lo ignora. Conviven hasta que se cierre `DF-09` (ver `docs/decisiones/decisiones-frontend.md`).
-
 ## Estructura
 
 ```text
@@ -82,7 +83,7 @@ src/
 │   └── actividades/     Línea de tiempo del historial comercial
 └── shared/
     ├── components/  Componentes de interfaz reutilizables
-    ├── data/        Datos de demostración, tipos y formato
+    ├── data/        Formateo exclusivamente presentacional
     ├── seo/         Metadatos por ruta y datos estructurados
     └── styles/      Tokens, base y patrones de pantalla
 ```
@@ -95,18 +96,17 @@ src/
 - **Iconos:** se agregan a `shared/components/Icono.tsx`, no se importan de librerías.
 - **SEO:** toda página pública renderiza `<Seo />` con `titulo`, `descripcion` y `canonica`. Las pantallas de `/app` lo hacen con `noIndexar`.
 
-## Datos de demostración
+## Integración con la API
 
-`src/shared/data/demo.json` es la única fuente. `demo.ts` lo tipa y expone las búsquedas (`empresa`, `contacto`, `oportunidadesDeEtapa`, `historialDe`, entre otras).
+`src/shared/api/` contiene el cliente `fetch`, el contrato generado y TanStack Query;
+`src/shared/sesion/` resuelve token, usuario, expiración y persistencia. Login y cambio
+de clave ya usan estas capas.
 
-Cuando exista la API, se reemplaza `demo.ts` por consultas de TanStack Query manteniendo la misma superficie de funciones: las pantallas no deberían cambiar.
+Los módulos `api*.ts` derivan sus DTO del esquema generado desde
+`backend/docs/openapi.yaml`. TanStack Query gestiona caché e invalidación; los formularios
+comerciales usan React Hook Form y Zod, y los filtros/paginación se reflejan en la URL.
 
-Los datos son ficticios y coherentes entre sí: el estado de cada oportunidad coincide con el tipo de su etapa, las cerradas tienen fecha real de cierre, las perdidas tienen motivo, los asistentes nunca superan la capacidad del salón y el historial de etapas termina siempre en la etapa actual.
+## Próximo corte de integración
 
-## Qué falta para conectar el backend
-
-1. Cliente de API y TanStack Query en lugar de `shared/data/demo.ts`.
-2. Autenticación con JWT, contexto de sesión y guardas de ruta.
-3. React Hook Form y Zod en los seis formularios (ver DF-06).
-4. Estados de carga, error y vacío por consulta.
-5. Vitest y Testing Library.
+1. Agregar navegación y pantallas administrativas por rol.
+2. Incorporar el alta de actividades y los cierres cuando existan sus endpoints.

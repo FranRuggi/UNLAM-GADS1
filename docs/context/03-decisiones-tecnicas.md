@@ -61,10 +61,9 @@ Siete etapas, con **visita al salón** como etapa propia de la industria:
 puede estar en una etapa `OPEN`; pasar a la etapa `WON`/`LOST` cierra la oportunidad.
 
 ### DP-09 — Salón y datos del evento · Acordada (12/09/2026)
-**Un solo salón por oportunidad** (FK `venue_id`, no N:N). Desde E1 la oportunidad incluye
-`event_date` y `attendee_count`, aunque la validación de capacidad y la reserva con
-exclusión GiST lleguen recién en la etapa de especialización (04/11).
-Los `EventService` asociados a una oportunidad quedan para después de E1.
+**Un solo salón por oportunidad** (FK `venue_id`, no N:N). V3 migra `event_date` a
+`event_start`/`event_end`, conserva `attendee_count`, agrega tipo de evento y servicios
+N:N, validación de capacidad y exclusión GiST. Ver DP-05/07/08 para su semántica.
 
 ### DT-04 a DT-22 — Bloque técnico · Acordadas (12/09/2026)
 Aprobadas en bloque tal como estaban propuestas. Se listan abajo como referencia.
@@ -98,16 +97,12 @@ Aprobadas en bloque tal como estaban propuestas. Se listan abajo como referencia
 
 ---
 
-## Funcionales abiertas que bloquean código (remiten a DP)
+## Decisiones funcionales relacionadas
 
-| DP | Qué hay que definir | Bloquea | Urgencia |
-|---|---|---|---|
-| DP-06 (parcial) | Etapas de E1 resueltas; faltan transiciones y resto de catálogos | Configuración y flujo completos | Antes de EF |
-| DP-03 (parcial) | Supuestos de E1 declarados; faltan formatos y obligatoriedad restantes | Validaciones pendientes | Post-E1 |
-| DP-02 | Alcance real del `SELLER`: ¿ve sólo lo asignado? ¿el contacto hereda el responsable de la empresa? | Autorización, queries | Alta |
-| DP-01 | Qué se puede modificar en una oportunidad cerrada y quién la reabre | `service` de cierre/reapertura | Media |
-| DP-07 | Semántica del rango temporal de reserva, zona horaria, extremos contiguos | Restricción GiST, tipos temporales | Media (antes de reservas) |
-| DP-08 | Cómo se aplica el nicho de hasta 50 personas (¿validación dura o informativa?) | Validación de capacidad | Media |
-| DP-10 | Campos buscables, filtros, orden por defecto y tamaño de página | Specifications | Baja |
-| DP-04 | Roles que administran salones y efecto de desactivar uno | `offerings/service` | Baja |
-| DP-05 | Fecha de ocurrencia vs fecha de registro de actividades | `Activity` | Baja |
+DP-01 a DP-10 están resueltas y aceptadas; su formulación vigente y consecuencias se
+mantienen en [`decisiones-pendientes.md`](../decisiones/decisiones-pendientes.md). En
+particular, DP-02 ya está implementada mediante `CustomerVisibilityPort` y
+`OpportunityAccessService`: `SELLER` ve clientes asignados o relacionados con sus
+oportunidades, sólo edita los asignados directamente y nunca ve oportunidades ajenas.
+DP-04 gobierna el siguiente corte de ABM administrativo. No quedan decisiones
+funcionales abiertas que bloqueen ese trabajo.

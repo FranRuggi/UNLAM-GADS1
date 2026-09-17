@@ -6,15 +6,15 @@ Cada `DF` indica qué se hizo provisoriamente en la maqueta, para que la decisi�
 
 | ID | Tema | Estado | Fecha límite sugerida |
 |---|---|---|---|
-| DF-01 | Estrategia de estilos: CSS Modules o framework de utilidades | Provisoria | 02/10 |
-| DF-02 | Iconografía propia frente a librería | Provisoria | 02/10 |
+| DF-01 | Estrategia de estilos: CSS Modules o framework de utilidades | **Aceptada: CSS Modules** | 12/09 |
+| DF-02 | Iconografía propia frente a librería | **Aceptada: iconografía propia** | 12/09 |
 | DF-03 | Prerenderizado de las páginas públicas | **Abierta, bloquea SEO real** | 20/09 |
-| DF-04 | Dominio definitivo y URL canónica | Resuelta técnicamente, falta elegir dominio | 02/10 |
-| DF-05 | Destino del formulario de contacto | Abierta | 02/10 |
-| DF-06 | Validación de formularios y presentación de errores | Abierta | 02/10 |
-| DF-07 | Interacción del embudo: arrastrar o menú de etapa | Abierta | 02/10 |
-| DF-08 | Modo oscuro | Diferida | Después de la entrega final |
-| DF-09 | Hosting del frontend: Vercel frente a Cloudflare Pages | **Abierta, se desvía de la arquitectura aprobada** | 02/10 |
+| DF-04 | Dominio definitivo y URL canónica | **Aceptada: variable + dominio Vercel** | 12/09 |
+| DF-05 | Destino del formulario de contacto | **Aceptada: académico, sin envío** | 12/09 |
+| DF-06 | Validación de formularios y presentación de errores | **Aceptada** | 12/09 |
+| DF-07 | Interacción del embudo: arrastrar o menú de etapa | **Aceptada: menú accesible** | 12/09 |
+| DF-08 | Modo oscuro | **Aceptada** | 12/09 |
+| DF-09 | Hosting del frontend: Vercel frente a Cloudflare Pages | **Aceptada: Vercel** | 12/09 |
 
 ---
 
@@ -78,7 +78,8 @@ Gracias al punto 2, un despliegue en Vercel produce canónicas y sitemap correct
 
 **Opciones:** un endpoint propio en el backend Spring; un servicio externo de formularios; o un enlace `mailto:` y quitar el formulario.
 
-**A decidir también:** qué pasa con los datos que se envían, para que la Política de Privacidad (sección de datos recolectados) siga siendo cierta cuando el formulario funcione.
+**Decisión:** el formulario es contenido académico y no envía datos ni simula una
+confirmación. La interfaz debe indicarlo claramente.
 
 ---
 
@@ -86,10 +87,10 @@ Gracias al punto 2, un despliegue en Vercel produce canónicas y sitemap correct
 
 **En la maqueta:** sólo atributos HTML (`required`, `type`, `min`, `max`) y `noValidate` en el `form`, así que no se valida nada al enviar. No hay estados de error diseñados.
 
-**A definir antes de implementar con React Hook Form y Zod:**
+**Decisión para implementar con React Hook Form y Zod:**
 
-- Cuándo se valida: al perder el foco, al escribir o al enviar.
-- Dónde se muestra el error: bajo el campo, en un resumen arriba, o ambos.
+- Se valida al perder el foco y al enviar.
+- Se muestra el error bajo el campo y en un resumen accesible.
 - Cómo se presentan los errores que devuelve el backend, incluido el `409 Conflict` por superposición de reservas.
 - Qué mensajes se usan. Conviene un catálogo único en español, no mensajes sueltos por campo.
 
@@ -101,7 +102,8 @@ El componente `Campo` ya reserva el lugar del texto de ayuda; falta la variante 
 
 **En la maqueta:** el tablero es de sólo lectura. En el detalle de la oportunidad hay un selector visual de etapas que cambia la selección en pantalla sin guardar.
 
-**A decidir:** si el cambio de etapa se hace arrastrando la ficha (requiere una librería de drag and drop y una solución accesible por teclado) o con un menú en la ficha. La consigna admite las dos: pide que el cambio se pueda hacer desde el detalle o desde el tablero.
+**Decisión:** usar un menú de etapa accesible desde el detalle y cada ficha del embudo,
+sin incorporar drag and drop.
 
 **Nota de accesibilidad:** si se elige arrastrar, hace falta una alternativa por teclado. Un menú en la ficha sirve para ambas cosas y es bastante más barato.
 
@@ -109,7 +111,8 @@ El componente `Campo` ya reserva el lugar del texto de ayuda; falta la variante 
 
 ## DF-08 — Modo oscuro
 
-**En la maqueta:** no está. La paleta de tokens está definida sólo en claro.
+**Decisión:** incorporar modo oscuro reutilizando los tokens centralizados y verificar
+contraste en todas las rutas.
 
 **Por qué se difirió:** duplica el trabajo de color y de verificación, y no forma parte de ninguna consigna.
 
@@ -119,25 +122,21 @@ El componente `Campo` ya reserva el lugar del texto de ayuda; falta la variante 
 
 ## DF-09 — Hosting del frontend
 
-**La arquitectura aprobada dice Cloudflare Pages** (`docs/arquitectura/01-arquitectura-general.md`). La maqueta se está publicando en **Vercel**, así que hay una desviación explícita que el equipo tiene que confirmar o revertir.
-
-**Estado del repositorio:** conviven las dos configuraciones.
-
-- `frontend/vercel.json`: reescrituras de SPA, cabeceras de caché para `/assets/*` y cabeceras de seguridad básicas.
-- `frontend/public/_redirects`: el equivalente para Cloudflare Pages. Vercel lo ignora.
-
-Ninguna de las dos molesta a la otra, así que mantener ambas cuesta nada mientras la decisión esté abierta.
+La arquitectura inicial proponía Cloudflare Pages, pero la maqueta ya se publicaba y
+validaba mediante previews de Vercel.
 
 **A favor de Vercel:** integración con GitHub sin configuración, previsualización por rama, y detección automática de Vite.
 
-**A favor de Cloudflare Pages:** es lo que dice el documento de arquitectura, y el backend en Render más la base en Neon ya reparten el despliegue entre varios proveedores.
-
-**A decidir:** cuál queda. Si se confirma Vercel, hay que actualizar el documento de arquitectura y borrar `_redirects`. Si se vuelve a Cloudflare, se borra `vercel.json`.
+**Decisión:** Vercel es el hosting definitivo del frontend. Se mantiene `vercel.json`,
+se retira `_redirects` y la decisión arquitectónica queda registrada en ADR-005.
 
 ---
 
 ## Nota sobre el contenido generado
 
-Los textos legales, el copy institucional y los datos de demostración se redactaron con asistencia de agentes de IA, con instrucciones explícitas de no inventar clientes, métricas, certificaciones ni trayectoria, y de declarar el carácter académico del proyecto. Después se revisaron y corrigieron a mano.
+Los textos legales y el copy institucional se redactaron con asistencia de agentes de
+IA, con instrucciones explícitas de no inventar clientes, métricas, certificaciones ni
+trayectoria, y de declarar el carácter académico del proyecto. Las rutas privadas ya no
+incluyen datos comerciales ficticios: consumen exclusivamente la API.
 
 Los textos legales **no fueron revisados por un profesional del derecho**. Son razonables para un trabajo práctico, pero si el producto llegara a usarse con datos reales de terceros hay que revisarlos, sobre todo lo relativo a la Ley 25.326 y al rol de encargado del tratamiento.

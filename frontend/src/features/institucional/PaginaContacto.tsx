@@ -184,7 +184,7 @@ export function PaginaContacto() {
                       Enviar consulta
                     </Boton>
                     <p className={css.avisoMaqueta}>
-                      Maqueta sin backend: el envío no sale del navegador.
+                      Formulario académico: el envío no sale del navegador.
                     </p>
                   </div>
                 </form>

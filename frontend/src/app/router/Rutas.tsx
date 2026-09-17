@@ -23,12 +23,12 @@ import { PaginaOportunidades } from "../../features/oportunidades/PaginaOportuni
 import { PaginaOportunidadDetalle } from "../../features/oportunidades/PaginaOportunidadDetalle";
 import { PaginaOportunidadFormulario } from "../../features/oportunidades/PaginaOportunidadFormulario";
 import { PaginaEmbudo } from "../../features/embudo/PaginaEmbudo";
+import { PaginaCambiarClave } from "../../features/acceso/PaginaCambiarClave";
+import { GuardaClaveCambiada, GuardaSesion } from "./Guardas";
 
 /**
- * Mapa de rutas de la maqueta.
- *
  * El sitio público es indexable; `/ingresar` y todo `/app` se marcan
- * `noindex`. No hay guardas de sesión: la autenticación llega con el backend.
+ * `noindex`. Las rutas privadas conservan el destino original al pedir login.
  */
 export function Rutas() {
   return (
@@ -45,8 +45,12 @@ export function Rutas() {
 
         <Route path="ingresar" element={<PaginaIngreso />} />
 
-        <Route path="app" element={<LayoutApp />}>
-          <Route index element={<PaginaPanel />} />
+        <Route element={<GuardaSesion />}>
+          <Route path="app/cambiar-clave" element={<PaginaCambiarClave />} />
+
+          <Route element={<GuardaClaveCambiada />}>
+            <Route path="app" element={<LayoutApp />}>
+              <Route index element={<PaginaPanel />} />
 
           <Route path="empresas" element={<PaginaEmpresas />} />
           <Route path="empresas/nueva" element={<PaginaEmpresaFormulario />} />
@@ -80,7 +84,9 @@ export function Rutas() {
             element={<PaginaOportunidadFormulario />}
           />
 
-          <Route path="embudo" element={<PaginaEmbudo />} />
+              <Route path="embudo" element={<PaginaEmbudo />} />
+            </Route>
+          </Route>
         </Route>
 
         <Route path="*" element={<PaginaNoEncontrada />} />

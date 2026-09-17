@@ -1,69 +1,9 @@
-import { Icono, type NombreIcono } from "../../shared/components/Icono";
 import { Avatar } from "../../shared/components/Avatar";
+import { Boton } from "../../shared/components/Boton";
 import { EstadoVacio } from "../../shared/components/EstadoVacio";
-import { nombreUsuario, tipoActividad, usuario } from "../../shared/data/demo";
-import type { Actividad } from "../../shared/data/tipos";
+import { Icono, type NombreIcono } from "../../shared/components/Icono";
 import { desdeHace, fechaHora } from "../../shared/data/formato";
 import css from "../../shared/styles/pantalla.module.css";
-
-/** El catálogo de tipos de actividad define su icono. */
-const ICONOS: Record<string, NombreIcono> = {
-  llamada: "llamada",
-  email: "email",
-  mensaje: "mensaje",
-  reunion: "reunion",
-  virtual: "virtual",
-  demo: "demo",
-  propuesta: "propuesta",
-  nota: "nota",
-};
-
-export function LineaDeActividades({
-  actividades,
-}: {
-  actividades: Actividad[];
-}) {
-  if (actividades.length === 0) {
-    return (
-      <EstadoVacio
-        icono="capas"
-        titulo="Sin actividades registradas"
-        descripcion="Las llamadas, reuniones y propuestas enviadas van a aparecer acá, en orden cronológico."
-      />
-    );
-  }
-
-  return (
-    <ol className={css.linea}>
-      {actividades.map((a) => {
-        const tipo = tipoActividad(a.tipoId);
-        const autor = usuario(a.usuarioId);
-
-        return (
-          <li key={a.id} className={css.lineaItem}>
-            <span className={css.lineaMarca}>
-              <Icono
-                nombre={ICONOS[tipo?.icono ?? "nota"] ?? "nota"}
-                tamano={15}
-              />
-            </span>
-
-            <div className={css.lineaCuerpo}>
-              <p className={css.lineaTitulo}>
-                {a.titulo}
-                <time className={css.lineaFecha} dateTime={a.fecha}>
-                  {fechaHora(a.fecha)} · {desdeHace(a.fecha)}
-                </time>
-              </p>
-              <p className={css.lineaDetalle}>{a.detalle}</p>
-              <p className={css.lineaAutor}>
-                {autor && <Avatar iniciales={autor.iniciales} tamano="sm" />}
-                {tipo?.nombre} registrada por {nombreUsuario(a.usuarioId)}
-              </p>
-            </div>
-          </li>
-        );
-      })}
-    </ol>
-  );
-}
+import type { Actividad } from "./apiActividades";
+const icono=(nombre?:string):NombreIcono=>{const n=nombre?.toLowerCase()??"";if(n.includes("llamada"))return"llamada";if(n.includes("correo"))return"email";if(n.includes("mensaje"))return"mensaje";if(n.includes("virtual"))return"virtual";if(n.includes("reunión"))return"reunion";if(n.includes("propuesta"))return"propuesta";return"nota";};
+export function LineaDeActividades({actividades,cargando,error,alReintentar}:{actividades:Actividad[];cargando?:boolean;error?:string;alReintentar?:()=>void}){if(cargando)return <EstadoVacio icono="capas" titulo="Cargando actividades…" descripcion="Consultando el historial comercial."/>;if(error)return <EstadoVacio icono="alerta" titulo="No pudimos cargar las actividades" descripcion={error} accion={<Boton variante="secundario" onClick={alReintentar}>Reintentar</Boton>}/>;if(!actividades.length)return <EstadoVacio icono="capas" titulo="Sin actividades registradas" descripcion="Las interacciones realizadas van a aparecer acá."/>;return <ol className={css.linea}>{actividades.map(a=>{const autor=`${a.author?.firstName??""} ${a.author?.lastName??""}`.trim()||"Usuario";return <li key={a.id} className={css.lineaItem}><span className={css.lineaMarca}><Icono nombre={icono(a.type?.name)} tamano={15}/></span><div className={css.lineaCuerpo}><p className={css.lineaTitulo}>{a.type?.name??"Actividad"}<time className={css.lineaFecha} dateTime={a.occurredAt}>{fechaHora(a.occurredAt)} · {desdeHace(a.occurredAt)}</time></p><p className={css.lineaDetalle}>{a.description||"Sin descripción"}{a.result&&<> · {a.result}</>}</p><p className={css.lineaAutor}><Avatar iniciales={autor.split(" ").map(x=>x[0]).join("").slice(0,2)} tamano="sm"/>Registrada por {autor}</p></div></li>})}</ol>}

@@ -55,3 +55,22 @@
   align-items: center;
   gap: var(--e-2);
 }
+
+.seccionesFormulario {
+  margin-top: var(--e-2);
+}
+
+.accionesFormulario {
+  display: flex;
+  gap: var(--e-2);
+}
+
+.errorGeneral {
+  margin-bottom: var(--e-6);
+  padding: var(--e-3);
+  border: 1px solid var(--peligro-borde);
+  border-radius: var(--radio-md);
+  background: var(--peligro-fondo);
+  color: var(--peligro);
+  font-size: var(--texto-sm);
+}

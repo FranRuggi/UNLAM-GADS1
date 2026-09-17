@@ -128,3 +128,9 @@
   font-size: var(--texto-xs);
   color: var(--tinta-500);
 }
+
+.error {
+  margin-top: var(--e-1);
+  font-size: var(--texto-sm);
+  color: var(--peligro);
+}

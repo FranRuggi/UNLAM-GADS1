@@ -46,7 +46,7 @@ export function PaginaInicio() {
             </div>
 
             <p className={css.heroNota}>
-              Proyecto académico en desarrollo. La demo usa datos de ejemplo.
+              Proyecto académico en desarrollo con un recorrido comercial conectado a la API.
             </p>
           </div>
 

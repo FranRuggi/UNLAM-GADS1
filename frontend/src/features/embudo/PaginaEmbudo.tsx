@@ -1,174 +1,70 @@
-import { Link } from "react-router-dom";
-import { Seo } from "../../shared/seo/Seo";
+import { BarraFiltros, Filtro, FiltroFecha } from "../../shared/components/BarraFiltros";
+import { Boton } from "../../shared/components/Boton";
 import { CabeceraPagina } from "../../shared/components/CabeceraPagina";
-import { BotonEnlace } from "../../shared/components/Boton";
-import { Icono } from "../../shared/components/Icono";
-import { Avatar } from "../../shared/components/Avatar";
-import { BarraFiltros, Filtro } from "../../shared/components/BarraFiltros";
+import { EstadoVacio } from "../../shared/components/EstadoVacio";
 import { Tarjeta } from "../../shared/components/Tarjeta";
-import {
-  clienteDe,
-  datos,
-  etapasOrdenadas,
-  oportunidadesDeEtapa,
-  salon,
-  usuario,
-} from "../../shared/data/demo";
-import { fecha, pesos } from "../../shared/data/formato";
-import pantalla from "../../shared/styles/pantalla.module.css";
+import { ESTADO_OPORTUNIDAD } from "../../shared/data/formato";
+import { useBusquedaUrl } from "../../shared/hooks/useBusquedaUrl";
+import { Seo } from "../../shared/seo/Seo";
+import { useUsuariosAsignables } from "../acceso/apiUsuarios";
+import { useEtapas, useOrigenes } from "../catalogos/apiCatalogos";
+import { useContactos } from "../contactos/apiContactos";
+import { useEmpresas } from "../empresas/apiEmpresas";
+import { FichaOportunidad } from "../oportunidades/FichaOportunidad";
+import { useCambiarEtapa, useEmbudo } from "../oportunidades/apiOportunidades";
+import { useSalones } from "../salones/apiSalones";
 import css from "./PaginaEmbudo.module.css";
 
 export function PaginaEmbudo() {
-  const etapas = etapasOrdenadas();
-  const abiertas = datos.oportunidades.filter((o) => o.estado === "ABIERTA");
-  const valorAbierto = abiertas.reduce((t, o) => t + o.valorEstimado, 0);
+  const url = useBusquedaUrl();
+  const filtros = {
+    q: url.parametros.get("q") || undefined,
+    status: url.parametros.get("status") || undefined,
+    stageId: url.parametros.get("stageId") || undefined,
+    originId: url.parametros.get("originId") || undefined,
+    salesRepId: url.parametros.get("salesRepId") || undefined,
+    venueId: url.parametros.get("venueId") || undefined,
+    companyId: url.parametros.get("companyId") || undefined,
+    contactId: url.parametros.get("contactId") || undefined,
+    eventFrom: url.parametros.get("eventFrom") || undefined,
+    eventTo: url.parametros.get("eventTo") || undefined,
+  };
+  const consulta = useEmbudo(filtros);
+  const usuarios = useUsuariosAsignables();
+  const etapas = useEtapas();
+  const origenes = useOrigenes();
+  const salones = useSalones();
+  const empresas = useEmpresas(0);
+  const contactos = useContactos(0);
+  const cambiar = useCambiarEtapa();
+  const abiertas = (consulta.data?.columns ?? []).filter((c) => !c.stageName?.toLowerCase().includes("ganada") && !c.stageName?.toLowerCase().includes("perdida"));
 
-  return (
-    <>
-      <Seo
-        titulo="Embudo comercial"
-        descripcion="Tablero de oportunidades agrupadas por etapa."
-        noIndexar
-      />
-
-      <CabeceraPagina
-        titulo="Embudo comercial"
-        descripcion="Las oportunidades agrupadas por etapa. Arrastrar una ficha va a cambiar su etapa y registrar el cambio en el historial."
-        meta={
-          <>
-            <span>
-              <Icono nombre="oportunidades" tamano={14} /> {abiertas.length}{" "}
-              oportunidades abiertas
-            </span>
-            <span>
-              <Icono nombre="dinero" tamano={14} /> {pesos(valorAbierto)} en
-              negociación
-            </span>
-          </>
-        }
-        acciones={
-          <>
-            <BotonEnlace
-              a="/app/oportunidades"
-              variante="secundario"
-              icono="ordenar"
-            >
-              Ver como lista
-            </BotonEnlace>
-            <BotonEnlace a="/app/oportunidades/nueva" icono="mas">
-              Nueva oportunidad
-            </BotonEnlace>
-          </>
-        }
-      />
-
-      <div className={pantalla.pila}>
-        <Tarjeta aSangre>
-          <BarraFiltros marcador="Buscar en el embudo">
-            <Filtro
-              etiqueta="Responsable"
-              opciones={datos.usuarios.map((u) => `${u.nombre} ${u.apellido}`)}
-            />
-            <Filtro etiqueta="Estado" opciones={["Abierta", "Ganada", "Perdida"]} />
-            <Filtro etiqueta="Origen" opciones={datos.origenes.map((o) => o.nombre)} />
-            <Filtro etiqueta="Salón" opciones={datos.salones.map((s) => s.nombre)} />
-          </BarraFiltros>
-        </Tarjeta>
-
-        <p className={pantalla.avisoMaqueta}>
-          <Icono nombre="info" tamano={16} />
-          Maqueta sin backend: el tablero muestra la distribución real de los
-          datos de demostración, pero todavía no permite mover fichas ni guardar
-          el cambio de etapa.
-        </p>
-
-        <div className={`${css.tablero} scroll-fino`}>
-          {etapas.map((etapa) => {
-            const oportunidades = oportunidadesDeEtapa(etapa.id);
-            const total = oportunidades.reduce((t, o) => t + o.valorEstimado, 0);
-
-            return (
-              <section
-                key={etapa.id}
-                className={css.columna}
-                aria-labelledby={`etapa-${etapa.id}`}
-              >
-                <header
-                  className={css.columnaCabecera}
-                  style={{ "--color-etapa": `var(--etapa-${etapa.color})` } as React.CSSProperties}
-                >
-                  <div className={css.columnaTitulo}>
-                    <span className={css.punto} aria-hidden="true" />
-                    <h2 id={`etapa-${etapa.id}`}>{etapa.nombre}</h2>
-                    <span className={css.cuenta}>{oportunidades.length}</span>
-                  </div>
-                  <p className={css.columnaTotal}>{pesos(total)}</p>
-                </header>
-
-                <div className={css.fichas}>
-                  {oportunidades.length === 0 ? (
-                    <p className={css.columnaVacia}>Sin oportunidades en esta etapa.</p>
-                  ) : (
-                    oportunidades.map((o) => {
-                      const responsable = usuario(o.responsableId);
-                      const sala = salon(o.salonId);
-
-                      return (
-                        <article key={o.id} className={css.ficha}>
-                          <Link
-                            to={`/app/oportunidades/${o.id}`}
-                            className={css.fichaTitulo}
-                          >
-                            {o.titulo}
-                          </Link>
-                          <p className={css.fichaCliente}>{clienteDe(o)}</p>
-
-                          <dl className={css.fichaDatos}>
-                            <div>
-                              <dt>
-                                <Icono nombre="salones" tamano={12} />
-                                <span className="solo-lectores">Salón</span>
-                              </dt>
-                              <dd>{sala?.nombre}</dd>
-                            </div>
-                            <div>
-                              <dt>
-                                <Icono nombre="calendario" tamano={12} />
-                                <span className="solo-lectores">Fecha del evento</span>
-                              </dt>
-                              <dd>{fecha(o.fechaEvento)}</dd>
-                            </div>
-                            <div>
-                              <dt>
-                                <Icono nombre="personas" tamano={12} />
-                                <span className="solo-lectores">Asistentes</span>
-                              </dt>
-                              <dd>{o.cantidadAsistentes}</dd>
-                            </div>
-                          </dl>
-
-                          <footer className={css.fichaPie}>
-                            <span className={css.fichaValor}>
-                              {pesos(o.valorEstimado)}
-                            </span>
-                            {responsable && (
-                              <Avatar
-                                iniciales={responsable.iniciales}
-                                nombre={`${responsable.nombre} ${responsable.apellido}`}
-                                tamano="sm"
-                              />
-                            )}
-                          </footer>
-                        </article>
-                      );
-                    })
-                  )}
-                </div>
-              </section>
-            );
-          })}
-        </div>
-      </div>
-    </>
-  );
+  return <>
+    <Seo titulo="Embudo comercial" descripcion="Oportunidades agrupadas por etapa." noIndexar />
+    <CabeceraPagina titulo="Embudo comercial" descripcion="Oportunidades reales agrupadas por su etapa actual." />
+    <Tarjeta aSangre>
+      <BarraFiltros marcador="Buscar por título" valor={url.busqueda} alCambiar={url.setBusqueda}>
+        <Filtro etiqueta="Etapa" valor={filtros.stageId} alCambiar={(v) => url.cambiar("stageId", v)} opciones={(etapas.data ?? []).map((e) => ({ valor: String(e.id), texto: e.name ?? "Etapa" }))} />
+        <Filtro etiqueta="Estado" valor={filtros.status} alCambiar={(v) => url.cambiar("status", v)} opciones={Object.entries(ESTADO_OPORTUNIDAD).map(([valor, e]) => ({ valor, texto: e.texto }))} />
+        <Filtro etiqueta="Responsable" valor={filtros.salesRepId} alCambiar={(v) => url.cambiar("salesRepId", v)} opciones={(usuarios.data ?? []).map((u) => ({ valor: String(u.id), texto: `${u.firstName} ${u.lastName}` }))} />
+        <Filtro etiqueta="Origen" valor={filtros.originId} alCambiar={(v) => url.cambiar("originId", v)} opciones={(origenes.data ?? []).map((o) => ({ valor: String(o.id), texto: o.name ?? "Origen" }))} />
+        <Filtro etiqueta="Salón" valor={filtros.venueId} alCambiar={(v) => url.cambiar("venueId", v)} opciones={(salones.data ?? []).map((s) => ({ valor: String(s.id), texto: s.name ?? "Salón" }))} />
+        <Filtro etiqueta="Empresa" valor={filtros.companyId} alCambiar={(v) => url.cambiar("companyId", v)} opciones={(empresas.data?.content ?? []).map((e) => ({ valor: String(e.id), texto: e.businessName ?? e.legalName ?? "Empresa" }))} />
+        <Filtro etiqueta="Contacto" valor={filtros.contactId} alCambiar={(v) => url.cambiar("contactId", v)} opciones={(contactos.data?.content ?? []).map((c) => ({ valor: String(c.id), texto: `${c.firstName} ${c.lastName}` }))} />
+        <FiltroFecha etiqueta="Evento desde" valor={filtros.eventFrom} alCambiar={(v) => url.cambiar("eventFrom", v)} />
+        <FiltroFecha etiqueta="Evento hasta" valor={filtros.eventTo} alCambiar={(v) => url.cambiar("eventTo", v)} />
+      </BarraFiltros>
+      {consulta.isPending
+        ? <EstadoVacio icono="embudo" titulo="Cargando embudo…" descripcion="Consultando las oportunidades." />
+        : consulta.isError
+          ? <EstadoVacio icono="alerta" titulo="No pudimos cargar el embudo" descripcion={consulta.error.message} accion={<Boton variante="secundario" onClick={() => consulta.refetch()}>Reintentar</Boton>} />
+          : !abiertas.some((c) => c.opportunities?.length)
+            ? <EstadoVacio icono="embudo" titulo="El embudo está vacío" descripcion="No hay oportunidades que coincidan con los filtros." />
+            : <div className={css.tablero}>{abiertas.map((columna, indice) => <section key={columna.stageId} className={css.columna}>
+              <header><h2>{columna.stageName}</h2><span>{columna.opportunities?.length ?? 0}</span></header>
+              <ul>{(columna.opportunities ?? []).map((o) => <li key={o.id}><FichaOportunidad oportunidad={o} accion={o.id ? <select aria-label={`Cambiar etapa de ${o.title}`} value={o.stageId} disabled={cambiar.isPending} onChange={(e) => cambiar.mutate({ id: o.id!, stageId: Number(e.target.value) })}>{abiertas.map((destino) => <option key={destino.stageId} value={destino.stageId}>{destino.stageName}</option>)}</select> : undefined} /></li>)}</ul>
+              {indice === abiertas.length - 1 && cambiar.isError && <p role="alert">{cambiar.error.message}</p>}
+            </section>)}</div>}
+    </Tarjeta>
+  </>;
 }

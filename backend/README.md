@@ -123,9 +123,12 @@ Ver el detalle en [`docs/docker.md`](docs/docker.md).
 | Email | Password | Rol |
 |---|---|---|
 | `admin@ztech.local` | `Admin123!` | `ADMIN` |
+| `vendedor@ztech.local` | `Admin123!` | `SELLER` |
+| `gerente@ztech.local` | `Admin123!` | `SALES_MANAGER` |
 
 Es un usuario **semilla para desarrollo y demo**, creado por
-`V2__seed_catalogs.sql` — no es una credencial de producción.
+`V2__seed_catalogs.sql` y `V4__seed_commercial_demo.sql` — no son credenciales de
+producción y exigen cambio de contraseña al ingresar.
 
 ## Cómo correr los tests
 
@@ -139,7 +142,9 @@ Surefire en `test` — es la convención estándar de Maven) levantan su propio 
 efímero con Testcontainers y corren las migraciones de Flyway desde una base vacía en
 cada ejecución. No dependen de Supabase ni de `.env`.
 
-Estado actual: **34 tests** (5 unitarios + 29 de integración), todos en verde.
+La suite usa PostgreSQL 16 de Testcontainers y Flyway V1–V4 desde base vacía. Incluye
+el salto V2→V3 con datos legacy y verificaciones específicas del seed V4, filtros,
+actividades e historial.
 
 ## Documentación de la API
 
@@ -165,16 +170,17 @@ y [ADR-001](../docs/decisiones/adr/ADR-001-estructura-de-paquetes.md).
 com.ztech.crm/
 ├── shared/{config,security,exception,audit,validation}/
 ├── tenancy/          # Tenant
-├── access/           # User, Role, login
+├── access/           # User, Role, login, contraseña y administración de usuarios
 ├── customers/        # Company, Contact
 ├── offerings/        # Venue, EventService (sólo lectura en E1)
-├── catalogs/         # Stage (sólo lectura en E1)
-└── opportunities/    # Opportunity, StageHistory, cambio de etapa, tablero
+├── catalogs/         # Etapas, tipos de evento/actividad, orígenes y motivos
+├── opportunities/    # Opportunity, StageHistory, cambio de etapa, tablero
+└── activities/       # Lectura del historial comercial
 ```
 
 ## Estado y alcance
 
-**Implementado (Entrega 1):**
+**Implementado:**
 
 - Login con JWT (`POST /api/v1/auth/login`).
 - ABM de empresas y contactos, con relación opcional entre ambos.
@@ -185,14 +191,21 @@ com.ztech.crm/
 - Tablero de oportunidades agrupadas por etapa (`GET /opportunities/board`).
 - Multi-tenancy (ADR-003): toda entidad de negocio filtra por el tenant del usuario
   autenticado.
+- Administración de usuarios por `ADMIN`, contraseña temporal, cambio obligatorio y
+  revocación de JWT anteriores con `auth_version`.
+- Empresas con razón social/nombre comercial/localidad y responsables obligatorios.
+- Salones con estado, localidad, descripción y equipamiento; tipos de evento.
+- Oportunidades con rango horario, tipo de evento, servicios asociados, control de
+  capacidad y restricción GiST de reservas ganadas.
+- Filtros DP-10, paginación acotada y orden validado en clientes y oportunidades.
+- Lectura de actividades por empresa, contacto y oportunidad, con autor y tipo resueltos.
+- Lectura del historial de etapas; el alta registra también la etapa inicial.
 
 **Todavía no implementado** (ver `docs/specs-backend/tasks.md` para el detalle fase
 por fase):
 
-- Roles y permisos por alcance (`SELLER` sólo ve lo asignado) — Fase 5/6.
-- ABM de usuarios, de salones/servicios, y de los catálogos configurables — Fase 6.
-- Actividades e historial comercial, cierre ganado/perdido, motivos de pérdida — Fase 7.
-- Validación de capacidad del salón y reserva sin solapamiento (restricción GiST) —
-  Fase 8, depende de decisiones funcionales todavía abiertas (DP-07, DP-08).
-- Búsqueda, filtros y paginación avanzada — Fase 9.
+- ABM administrativo de salones/servicios y de los catálogos configurables — Fase 6.
+- Alta de actividades y cierre ganado/perdido — Fase 7.
+- Confirmación ganada con traducción amigable del conflicto de reserva y prueba de
+  concurrencia — Fase 8; la restricción GiST ya existe en V3.
 - Deploy en Render — en curso, gestionado por el equipo.

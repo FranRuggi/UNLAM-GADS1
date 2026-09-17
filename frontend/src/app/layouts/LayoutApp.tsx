@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Logo } from "../../shared/components/Logo";
 import { Icono, type NombreIcono } from "../../shared/components/Icono";
 import { Avatar } from "../../shared/components/Avatar";
 import { BotonTema } from "../../shared/components/BotonTema";
-import { usuarioActual } from "../../shared/data/demo";
-import { ROL } from "../../shared/data/formato";
+import { useSesion } from "../../shared/sesion/contextoSesion";
 import css from "./LayoutApp.module.css";
 
 type ItemNav = { a: string; texto: string; icono: NombreIcono; exacto?: boolean };
@@ -28,6 +27,15 @@ const CATALOGO: ItemNav[] = [
 export function LayoutApp() {
   const [lateralAbierto, setLateralAbierto] = useState(false);
   const { pathname } = useLocation();
+  const navegar = useNavigate();
+  const { sesion, cerrar } = useSesion();
+  const usuario = sesion!.usuario;
+  const iniciales = `${usuario.nombre.charAt(0)}${usuario.apellido.charAt(0)}`;
+  const roles = {
+    ADMIN: "Administrador",
+    SALES_MANAGER: "Responsable comercial",
+    SELLER: "Vendedor",
+  };
 
   // La navegación cierra el menú. Se ajusta durante el render, que es el
   // patrón de React para reaccionar a un cambio de entrada sin un efecto.
@@ -87,9 +95,6 @@ export function LayoutApp() {
         </nav>
 
         <div className={css.lateralPie}>
-          <p className={css.aviso}>
-            Maqueta sin backend. Los datos son de demostración y no se guardan.
-          </p>
           <Link to="/" className={css.volver}>
             <Icono nombre="flechaIzquierda" tamano={14} />
             Volver al sitio
@@ -109,36 +114,30 @@ export function LayoutApp() {
             <Icono nombre="menu" tamano={19} />
           </button>
 
-          <div className={css.buscador}>
-            <Icono nombre="buscar" tamano={16} />
-            <input
-              type="search"
-              placeholder="Buscar empresas, contactos u oportunidades"
-              aria-label="Buscar en el CRM"
-            />
-          </div>
-
           <div className={css.superiorAcciones}>
             <BotonTema className={css.iconoAccion} />
 
-            <button type="button" className={css.iconoAccion} aria-label="Notificaciones">
-              <Icono nombre="campana" tamano={18} />
-              <span className={css.marcador} aria-hidden="true" />
-            </button>
-
             <div className={css.usuario}>
-              <Avatar iniciales={usuarioActual.iniciales} tamano="md" />
+              <Avatar iniciales={iniciales} tamano="md" />
               <span className={css.usuarioDatos}>
                 <span className={css.usuarioNombre}>
-                  {usuarioActual.nombre} {usuarioActual.apellido}
+                  {usuario.nombre} {usuario.apellido}
                 </span>
-                <span className={css.usuarioRol}>{ROL[usuarioActual.rol]}</span>
+                <span className={css.usuarioRol}>{roles[usuario.rol]}</span>
               </span>
             </div>
 
-            <Link to="/" className={css.iconoAccion} aria-label="Cerrar sesión">
+            <button
+              type="button"
+              className={css.iconoAccion}
+              aria-label="Cerrar sesión"
+              onClick={() => {
+                cerrar();
+                navegar("/ingresar", { replace: true });
+              }}
+            >
               <Icono nombre="salir" tamano={18} />
-            </Link>
+            </button>
           </div>
         </header>
 

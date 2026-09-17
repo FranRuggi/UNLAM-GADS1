@@ -1,12 +1,16 @@
-import { type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Seo } from "../../shared/seo/Seo";
-import { Logo } from "../../shared/components/Logo";
-import { Icono } from "../../shared/components/Icono";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { z } from "zod";
+import { ErrorDeApi } from "../../shared/api/errores";
 import { Boton } from "../../shared/components/Boton";
-import { Campo, Entrada } from "../../shared/components/Campos";
 import { BotonTema } from "../../shared/components/BotonTema";
-import { usuarioActual } from "../../shared/data/demo";
+import { Campo, Entrada } from "../../shared/components/Campos";
+import { Icono } from "../../shared/components/Icono";
+import { Logo } from "../../shared/components/Logo";
+import { Seo } from "../../shared/seo/Seo";
+import { useSesion } from "../../shared/sesion/contextoSesion";
 import css from "./PaginaIngreso.module.css";
 
 const GARANTIAS = [
@@ -15,17 +19,46 @@ const GARANTIAS = [
   "Disponibilidad del salón validada antes de confirmar",
 ];
 
-export function PaginaIngreso() {
-  const navegar = useNavigate();
+const esquema = z.object({
+  email: z.string().trim().min(1, "Ingresá tu correo.").email("Ingresá un correo válido."),
+  password: z.string().min(1, "Ingresá tu contraseña."),
+  mantener: z.boolean(),
+});
 
-  /**
-   * No hay autenticación: el formulario navega al panel para poder recorrer
-   * la maqueta. El login real llega con Spring Security y JWT (ver DF-05).
-   */
-  const alEnviar = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    navegar("/app");
-  };
+type DatosIngreso = z.infer<typeof esquema>;
+
+export function PaginaIngreso() {
+  const { ingresar } = useSesion();
+  const navegar = useNavigate();
+  const ubicacion = useLocation();
+  const [parametros] = useSearchParams();
+  const [errorGeneral, setErrorGeneral] = useState<string>();
+  const mensaje = (ubicacion.state as { mensaje?: string } | null)?.mensaje;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<DatosIngreso>({
+    resolver: zodResolver(esquema),
+    mode: "onBlur",
+    defaultValues: { email: "", password: "", mantener: false },
+  });
+
+  const alEnviar = handleSubmit(async ({ email, password, mantener }) => {
+    setErrorGeneral(undefined);
+    try {
+      const sesion = await ingresar({ email: email.trim(), password }, mantener);
+      const solicitado = parametros.get("desde");
+      const destino = solicitado?.startsWith("/app") ? solicitado : "/app";
+      navegar(sesion.debeCambiarClave ? "/app/cambiar-clave" : destino, { replace: true });
+    } catch (error) {
+      setErrorGeneral(
+        error instanceof ErrorDeApi
+          ? error.message
+          : "No pudimos iniciar sesión. Intentá nuevamente.",
+      );
+    }
+  });
 
   return (
     <>
@@ -36,7 +69,6 @@ export function PaginaIngreso() {
       />
 
       <div className={css.pantalla}>
-        {/* --- Formulario ------------------------------------------------ */}
         <div className={css.columnaForm}>
           <header className={css.cabecera}>
             <Link to="/" aria-label="Ztech CRM, inicio">
@@ -48,83 +80,72 @@ export function PaginaIngreso() {
           <main className={css.centro}>
             <div className={css.caja}>
               <h1 className={css.titulo}>Ingresá a tu cuenta</h1>
-              <p className={css.bajada}>
-                Usá el correo de tu equipo comercial para acceder al CRM.
-              </p>
+              <p className={css.bajada}>Usá el correo de tu equipo comercial para acceder al CRM.</p>
+
+              {mensaje && <p className={css.exito} role="status">{mensaje}</p>}
+              {errorGeneral && <p className={css.errorGeneral} role="alert">{errorGeneral}</p>}
 
               <form onSubmit={alEnviar} className={css.formulario} noValidate>
-                <Campo etiqueta="Correo electrónico" requerido>
-                  {(id) => (
+                <Campo etiqueta="Correo electrónico" requerido error={errors.email?.message}>
+                  {(id, describedBy) => (
                     <Entrada
                       id={id}
-                      name="email"
                       type="email"
                       autoComplete="username"
-                      defaultValue={usuarioActual.email}
-                      placeholder="nombre@ztechcrm.com.ar"
-                      required
+                      placeholder="nombre@empresa.com.ar"
+                      aria-describedby={describedBy}
+                      aria-invalid={Boolean(errors.email)}
+                      {...register("email")}
                     />
                   )}
                 </Campo>
 
-                <Campo etiqueta="Contraseña" requerido>
-                  {(id) => (
+                <Campo etiqueta="Contraseña" requerido error={errors.password?.message}>
+                  {(id, describedBy) => (
                     <Entrada
                       id={id}
-                      name="password"
                       type="password"
                       autoComplete="current-password"
-                      defaultValue="demo-ztech-2026"
-                      required
+                      aria-describedby={describedBy}
+                      aria-invalid={Boolean(errors.password)}
+                      {...register("password")}
                     />
                   )}
                 </Campo>
 
                 <div className={css.fila}>
                   <label className={css.recordar}>
-                    <input type="checkbox" name="recordar" defaultChecked />
+                    <input type="checkbox" {...register("mantener")} />
                     <span>Mantener la sesión iniciada</span>
                   </label>
-                  <a href="#recuperar" className={css.olvide}>
-                    Olvidé mi contraseña
-                  </a>
                 </div>
 
-                <Boton type="submit" tamano="lg" anchoCompleto>
-                  Iniciar sesión
+                <Boton type="submit" tamano="lg" anchoCompleto disabled={isSubmitting}>
+                  {isSubmitting ? "Ingresando…" : "Iniciar sesión"}
                 </Boton>
               </form>
 
               <p className={css.aviso}>
                 <Icono nombre="info" tamano={15} />
-                Maqueta de demostración: cualquier dato te lleva al panel. No hay
-                autenticación ni datos reales.
+                Proyecto académico con acceso exclusivo para usuarios habilitados.
               </p>
             </div>
           </main>
 
           <footer className={css.pie}>
-            <Link to="/">Volver al sitio</Link>
-            <span aria-hidden="true">·</span>
-            <Link to="/terminos">Términos</Link>
-            <span aria-hidden="true">·</span>
+            <Link to="/">Volver al sitio</Link><span aria-hidden="true">·</span>
+            <Link to="/terminos">Términos</Link><span aria-hidden="true">·</span>
             <Link to="/privacidad">Privacidad</Link>
           </footer>
         </div>
 
-        {/* --- Panel de marca -------------------------------------------- */}
         <aside className={css.columnaMarca} aria-hidden="true">
           <div className={css.marcaContenido}>
             <Logo variante="completo" tamano={44} tono="claro" />
-            <p className={css.marcaLema}>
-              El control comercial de tu salón, sin planillas sueltas.
-            </p>
+            <p className={css.marcaLema}>El control comercial de tu salón, sin planillas sueltas.</p>
             <ul className={css.garantias}>
-              {GARANTIAS.map((g) => (
-                <li key={g}>
-                  <Icono nombre="check" tamano={16} />
-                  {g}
-                </li>
+              {GARANTIAS.map((garantia) => (
+                <li key={garantia}><Icono nombre="check" tamano={16} />{garantia}</li>
               ))}
             </ul>
           </div>

@@ -1,4 +1,4 @@
-import type { EstadoCliente, EstadoOportunidad, EstadoSalon } from "./tipos";
+import type { components } from "../api/esquema-api";
 import type { Tono } from "../components/Etiqueta";
 
 const LOCALE = "es-AR";
@@ -27,9 +27,7 @@ const horaCorta = new Intl.DateTimeFormat(LOCALE, {
 });
 
 /**
- * Las fechas del set de demostración son locales, sin zona (ver DP-07).
- * Devuelve `null` ante un valor ausente para que un dato incompleto muestre
- * un guión en lugar de romper la pantalla.
+ * Los instantes llegan de la API en UTC y se muestran en la zona de negocio.
  */
 const aFecha = (iso: string | null | undefined) =>
   iso ? new Date(iso.length === 10 ? `${iso}T00:00:00` : iso) : null;
@@ -60,10 +58,7 @@ export const fechaHora = (iso: string | null | undefined) => {
 };
 
 /** "hace 3 días", para las líneas de tiempo de actividad. */
-export const desdeHace = (
-  iso: string | null | undefined,
-  referencia = new Date("2026-09-12T12:00:00"),
-) => {
+export const desdeHace = (iso: string | null | undefined, referencia = new Date()) => {
   const d = aFecha(iso);
   if (!d) return SIN_DATO;
   const dias = Math.round((referencia.getTime() - d.getTime()) / 86_400_000);
@@ -75,6 +70,10 @@ export const desdeHace = (
 };
 
 /* --- Etiquetas legibles de los estados ------------------------------------ */
+
+type EstadoCliente = NonNullable<components["schemas"]["CompanyResponse"]["status"]>;
+type EstadoOportunidad = NonNullable<components["schemas"]["OpportunityResponse"]["status"]>;
+type EstadoSalon = NonNullable<components["schemas"]["VenueResponse"]["status"]>;
 
 export const ESTADO_CLIENTE: Record<EstadoCliente, { texto: string; tono: Tono }> = {
   POTENCIAL: { texto: "Potencial", tono: "info" },
@@ -100,6 +99,6 @@ export const ESTADO_SALON: Record<EstadoSalon, { texto: string; tono: Tono }> = 
 
 export const ROL: Record<string, string> = {
   ADMIN: "Administrador",
-  VENDEDOR: "Vendedor",
-  RESPONSABLE_COMERCIAL: "Responsable comercial",
+  SELLER: "Vendedor",
+  SALES_MANAGER: "Responsable comercial",
 };
