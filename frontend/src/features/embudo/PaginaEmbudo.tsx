@@ -60,11 +60,48 @@ export function PaginaEmbudo() {
           ? <EstadoVacio icono="alerta" titulo="No pudimos cargar el embudo" descripcion={consulta.error.message} accion={<Boton variante="secundario" onClick={() => consulta.refetch()}>Reintentar</Boton>} />
           : !abiertas.some((c) => c.opportunities?.length)
             ? <EstadoVacio icono="embudo" titulo="El embudo está vacío" descripcion="No hay oportunidades que coincidan con los filtros." />
-            : <div className={css.tablero}>{abiertas.map((columna, indice) => <section key={columna.stageId} className={css.columna}>
-              <header><h2>{columna.stageName}</h2><span>{columna.opportunities?.length ?? 0}</span></header>
-              <ul>{(columna.opportunities ?? []).map((o) => <li key={o.id}><FichaOportunidad oportunidad={o} accion={o.id ? <select aria-label={`Cambiar etapa de ${o.title}`} value={o.stageId} disabled={cambiar.isPending} onChange={(e) => cambiar.mutate({ id: o.id!, stageId: Number(e.target.value) })}>{abiertas.map((destino) => <option key={destino.stageId} value={destino.stageId}>{destino.stageName}</option>)}</select> : undefined} /></li>)}</ul>
-              {indice === abiertas.length - 1 && cambiar.isError && <p role="alert">{cambiar.error.message}</p>}
-            </section>)}</div>}
+            : <>
+              {cambiar.isError && <p className={css.error} role="alert">{cambiar.error.message}</p>}
+              <div className={css.tablero} role="region" aria-label="Oportunidades por etapa" tabIndex={0}>
+                {abiertas.map((columna) => (
+                  <section key={columna.stageId} className={css.columna} aria-labelledby={`etapa-${columna.stageId}`}>
+                    <header className={css.columnaCabecera}>
+                      <h2 id={`etapa-${columna.stageId}`}>{columna.stageName}</h2>
+                      <span className={css.cuenta} aria-label={`${columna.opportunities?.length ?? 0} oportunidades`}>
+                        {columna.opportunities?.length ?? 0}
+                      </span>
+                    </header>
+                    {columna.opportunities?.length ? (
+                      <ul className={css.fichas}>
+                        {columna.opportunities.map((o) => (
+                          <li key={o.id}>
+                            <FichaOportunidad
+                              oportunidad={o}
+                              variante="embudo"
+                              accion={o.id ? (
+                                <label className={css.cambioEtapa}>
+                                  <span>Cambiar etapa</span>
+                                  <select
+                                    aria-label={`Cambiar etapa de ${o.title}`}
+                                    value={o.stageId}
+                                    disabled={cambiar.isPending}
+                                    onChange={(e) => cambiar.mutate({ id: o.id!, stageId: Number(e.target.value) })}
+                                  >
+                                    {abiertas.map((destino) => (
+                                      <option key={destino.stageId} value={destino.stageId}>{destino.stageName}</option>
+                                    ))}
+                                  </select>
+                                </label>
+                              ) : undefined}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    ) : <p className={css.columnaVacia}>Sin oportunidades en esta etapa</p>}
+                  </section>
+                ))}
+              </div>
+            </>}
     </Tarjeta>
   </>;
 }
