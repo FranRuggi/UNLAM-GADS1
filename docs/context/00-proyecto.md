@@ -81,9 +81,10 @@ Migraciones: `backend/src/main/resources/db/migration/V1__initial_schema.sql`, e
 por el usuario e implementación arrancó — no son un borrador esperando luz verde.
 
 **Estado registrado el 14/09/2026**: Fases 0-4 hechas y estabilización post-E1 en curso.
-V3 incorpora seguridad de contraseña temporal, responsables obligatorios, modelo
+El esquema incorpora seguridad de contraseña temporal, responsables obligatorios, modelo
 ampliado de empresas/salones/oportunidades, tipos de evento, servicios asociados y la
-restricción GiST. V4 agrega un seed comercial coherente. El backend ya aplica el alcance
+restricción GiST y un seed comercial coherente. Desde el reinicio del 17/09/2026,
+todo se instala con la migración consolidada V1. El backend ya aplica el alcance
 comercial de `SELLER` a clientes, oportunidades, tablero y actividades mediante puertos
 entre módulos; expone filtros DP-10, catálogos de lectura e historial de etapas. El
 frontend autentica contra la API, conserva sesión, fuerza el cambio inicial de clave e
@@ -131,7 +132,7 @@ Una oportunidad `ABIERTA` sólo puede estar en una etapa `OPEN`. Pasar a `WON`/`
 la oportunidad y exige fecha real de cierre (y motivo de pérdida si es `LOST`).
 
 **Oportunidad** (DP-05/07/09): **un solo salón** (`venue_id`, no N:N), rango
-`[event_start,event_end)`, tipo de evento obligatorio y `attendee_count`. V3 ya agrega
+`[event_start,event_end)`, tipo de evento obligatorio y `attendee_count`. V1 incluye
 la asociación N:N simple con `EventService`, la validación de capacidad y la exclusión
 GiST para reservas ganadas; falta integrar el caso de uso de cierre y su concurrencia.
 

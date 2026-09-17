@@ -240,15 +240,17 @@ erDiagram
 
 ## 4. Migraciones Flyway
 
-- `V1__initial_schema.sql`: `CREATE EXTENSION IF NOT EXISTS btree_gist;` + las 13 tablas
-  de la sección 3, sin la restricción GiST (se agrega en una migración posterior, junto
-  con DP-07).
-- `V2__seed_catalogs.sql`: un `Tenant` semilla, un `User` `ADMIN` semilla (password
-  hasheada con BCrypt, documentada en el README de `backend/` para la demo), las 7
-  `stages` de DP-06, 2+ `venues`, algunos `event_services`, `origins`, `loss_reasons` y
-  `activity_types` mínimos de la consigna.
-- `V3__...`: reservada para la restricción de exclusión GiST cuando se resuelva DP-07.
-- Cada migración corre desde base vacía en CI (DT-20) y nunca se edita una vez mergeada.
+- `V1__initial_schema.sql`: esquema final de 15 tablas, extensión `btree_gist`,
+  restricciones e índices, incluida la exclusión GiST de reservas ganadas (DP-07).
+- La misma V1 carga tenant, usuarios de demo con contraseña BCrypt y cambio inicial
+  obligatorio, 7 etapas, salones, servicios y catálogos, incluidos tipos de evento.
+  Conserva el escenario comercial de empresas, contactos, oportunidades, servicios
+  asociados, historial de etapas y actividades.
+- Consolidación excepcional de V1–V4 autorizada el 17/09/2026 tras reiniciar la base.
+  Se instala desde una base vacía, sin el historial Flyway anterior. Se eliminaron los
+  pasos de conversión de datos legacy; los cambios posteriores se versionan desde V2.
+- Las migraciones aplicadas vuelven a ser inmutables; se validan desde base vacía con
+  Testcontainers y en CI (DT-20).
 
 ## 5. Capas y flujo de una request
 
@@ -510,7 +512,7 @@ Estructura mínima:
 8. Documentación de la API: Swagger UI (`/swagger-ui.html`) en local, archivo estático en
    `docs/openapi.yaml`, colección de Postman en `docs/postman/` con sus pasos de import.
 9. Diagramas: link a `docs/diagrams/`.
-10. Usuario semilla para probar (email y password del `ADMIN` de `V2__seed_catalogs.sql`),
+10. Usuario semilla para probar (email y password del `ADMIN` de `V1__initial_schema.sql`),
     aclarando que es sólo para desarrollo/demo, no una credencial de producción.
 11. Estructura de paquetes (resumen breve, con link a `docs/context/02-backend-convenciones.md`
     para el detalle).

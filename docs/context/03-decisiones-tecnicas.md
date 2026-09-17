@@ -57,13 +57,13 @@ Siete etapas, con **visita al salón** como etapa propia de la industria:
 | 7 | Perdida | perdida | sí |
 
 `Stage` es tabla configurable con `name`, `position`, `kind` (`OPEN`/`WON`/`LOST`) y
-`active`. Se precargan en `V2__seed_catalogs.sql`. Regla: una oportunidad `ABIERTA` sólo
+`active`. Se precargan en `V1__initial_schema.sql`. Regla: una oportunidad `ABIERTA` sólo
 puede estar en una etapa `OPEN`; pasar a la etapa `WON`/`LOST` cierra la oportunidad.
 
 ### DP-09 — Salón y datos del evento · Acordada (12/09/2026)
-**Un solo salón por oportunidad** (FK `venue_id`, no N:N). V3 migra `event_date` a
-`event_start`/`event_end`, conserva `attendee_count`, agrega tipo de evento y servicios
-N:N, validación de capacidad y exclusión GiST. Ver DP-05/07/08 para su semántica.
+**Un solo salón por oportunidad** (FK `venue_id`, no N:N). La V1 consolidada incluye
+`event_start`/`event_end`, `attendee_count`, tipo de evento, servicios N:N y exclusión
+GiST; el backend valida la capacidad. Ver DP-05/07/08 para su semántica.
 
 ### DT-04 a DT-22 — Bloque técnico · Acordadas (12/09/2026)
 Aprobadas en bloque tal como estaban propuestas. Se listan abajo como referencia.
@@ -86,7 +86,7 @@ Aprobadas en bloque tal como estaban propuestas. Se listan abajo como referencia
 | DT-14 | Baja lógica | La consigna la define como **cambio de estado**: `status = INACTIVO` para Company/Contact. Booleano `active` sólo para catálogos, salones, servicios y usuarios. Sin `deleted_at`. |
 | DT-15 | Fechas y horas | Persistir en UTC (`timestamptz` ↔ `Instant`/`OffsetDateTime`). Zona de negocio `America/Argentina/Buenos_Aires`. El tipo exacto del rango del evento depende de **DP-07**. |
 | DT-16 | Moneda | Una sola moneda (ARS). `NUMERIC(15,2)` ↔ `BigDecimal`. Sin campo `currency`. |
-| DT-17 | Datos semilla | **Migraciones Flyway** (`V2__seed_catalogs.sql`), no `CommandLineRunner`: reproducible y versionado. |
+| DT-17 | Datos semilla | **Migraciones Flyway** (`V1__initial_schema.sql`), no `CommandLineRunner`: reproducible y versionado. |
 | DT-18 | Contrato con el frontend | **springdoc-openapi** activado, con anotaciones (`@Tag`, `@Operation`, `@ApiResponse`) en cada controller desde que se crea. El export estático vive en **`backend/docs/openapi.yaml`** (DT-23), no en `docs/api/` de la raíz — la instancia de frontend lo lee desde ahí o directo de `/v3/api-docs` en local. |
 | DT-23 | Artefactos de documentación del backend | Todo vive en **`backend/docs/`** salvo el `README.md`, que queda en `backend/` (convención estándar). Detalle completo en `docs/specs-backend/design.md` §12: `openapi.yaml`, `diagrams/` (mermaid), `postman/` (colección + environment). |
 | DT-24 | Docker en local | `backend/Dockerfile` construye la imagen de despliegue (ya definido, DT-21). Se agrega `backend/docker-compose.yml` para levantar esa misma imagen en local contra Supabase vía `.env`, espejando el ambiente de Render. Los tests de integración no usan compose: Testcontainers levanta su propio Postgres efímero por corrida. |

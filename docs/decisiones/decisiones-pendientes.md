@@ -23,8 +23,9 @@ Las decisiones **técnicas** del backend (DT-00..DT-24) se registran aparte, en
 ## Prioridad inmediata
 
 Las decisiones funcionales que bloqueaban las fases 5 a 9 quedaron aceptadas el
-12/09/2026. La implementación debe incorporarlas mediante migraciones nuevas: V1 y V2
-permanecen inmutables.
+12/09/2026. Tras el reinicio de la base autorizado el 17/09/2026, V1–V4 se consolidaron
+en una nueva V1. Las modificaciones posteriores requieren migraciones nuevas; la
+inmutabilidad sigue siendo la regla para versiones aplicadas.
 
 ---
 
@@ -109,8 +110,9 @@ permanecen inmutables.
 - Decisión: una oportunidad usa `event_start` y `event_end` como `timestamptz`, con
   `event_end > event_start`. La interfaz trabaja en `America/Argentina/Buenos_Aires` y
   la API persiste instantes UTC. La disponibilidad usa intervalos semiabiertos
-  `[inicio, fin)`, por lo que dos eventos contiguos no se superponen. Al migrar,
-  `event_date` pasa a inicio y el fin es inicio más un día. La restricción GiST aplica
+  `[inicio, fin)`, por lo que dos eventos contiguos no se superponen. La migración
+  histórica convertía `event_date` a inicio y fijaba el fin un día después; desde el
+  reinicio del 17/09/2026, V1 crea directamente el rango. La restricción GiST aplica
   únicamente a oportunidades `GANADA` del mismo tenant y salón.
 - Consecuencias y pruebas necesarias: validación de aplicación, restricción física y
   prueba concurrente donde exactamente una confirmación tiene éxito.
@@ -163,7 +165,7 @@ permanecen inmutables.
   de la consigna y aportar poco a la especialización exigida); embudo de 9 etapas con
   "disponibilidad verificada" y "seña" separadas (descartado por exceso de columnas en el
   tablero y más transiciones que validar sin beneficio claro para el TP).
-- Consecuencias y pruebas necesarias: migración `V2__seed_catalogs.sql`; validación de
+- Consecuencias y pruebas necesarias: migración `V1__initial_schema.sql`; validación de
   compatibilidad etapa/estado en el servicio de cambio de etapa; test de que una oportunidad
   abierta no puede quedar en etapa `WON`/`LOST` sin pasar por el caso de uso de cierre.
 - Resolución final: entre etapas activas `OPEN` se puede avanzar, retroceder o saltear

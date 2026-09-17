@@ -23,7 +23,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 
 /**
  * Prueba el login (BE-SEC-01) y el rechazo de requests sin token (BE-SEC-02) contra un
- * Postgres real, con las migraciones V1/V2 corriendo desde una base vacía — no contra
+ * Postgres real, con la migración V1 corriendo desde una base vacía — no contra
  * mocks. Cubre design.md §13 y las tareas de la Fase 1.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

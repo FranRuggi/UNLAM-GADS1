@@ -41,7 +41,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 /**
  * BE-OPP-01..03. De paso ejercita {@code GET /venues} y {@code GET /stages}
  * (BE-OFF-01, BE-CAT-01): los usa para armar los datos del test contra el seed real de
- * V2 (7 etapas, 3 salones).
+ * V1 (7 etapas, 3 salones).
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestRestTemplate

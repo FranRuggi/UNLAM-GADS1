@@ -7,17 +7,18 @@ Sigue los hitos de `docs/planificacion/plan-de-desarrollo.md` y la estrategia de
 vertical (migración → dominio → service → controller → tests). Cada tarea referencia el
 requisito (`requirements.md`) y la sección de diseño (`design.md`) que cubre.
 
-> ## 📍 Punto de retomada (última actualización: 14/09/2026)
+> ## 📍 Punto de retomada (última actualización: 17/09/2026)
 >
-> **Fases 0-4 completas y estabilización post-E1 en curso.** V3 agrega contraseña
+> **Fases 0-4 completas y estabilización post-E1 en curso.** El esquema incluye contraseña
 > temporal/revocación, responsables obligatorios, datos ampliados de empresas y salones,
 > tipos de evento, rango horario, servicios N:N y exclusión GiST. El frontend ya tiene
 > cliente HTTP, tipos OpenAPI, sesión, guardas, login, cambio de clave y empresas reales.
-> BE-SEC-06 ya aplica alcance de vendedor. V4 agrega un escenario comercial compacto.
+> BE-SEC-06 ya aplica alcance de vendedor. V1 incluye un escenario comercial compacto.
+> Tras el reinicio de la base, V1–V4 se consolidaron en una sola V1 (17/09/2026).
 > Se adelantaron las lecturas de actividades e historial y los filtros de DP-10 para
 > integrar todas las rutas privadas del frontend con la API.
 >
-> **Validación de este corte:** `./mvnw.cmd clean verify` pasó 38/38 pruebas
+> **Validación histórica del 14/09/2026 (antes de consolidar):** `./mvnw.cmd clean verify` pasó 38/38 pruebas
 > (5 unitarias + 33 IT) con PostgreSQL 16. Incluye Flyway V1–V3 desde base vacía,
 > `MigrationV3IT` para el salto V2→V3 con registros legacy y `SellerScopeIT` para
 > alcance comercial y acceso cruzado. Frontend: 6/6 pruebas, lint y build en verde.
@@ -33,6 +34,18 @@ requisito (`requirements.md`) y la sección de diseño (`design.md`) que cubre.
 > repetida en cada fase de abajo para no inflar la lista — se aplica siempre.
 
 ---
+
+## Consolidación de migraciones — 17/09/2026
+
+- [x] Por pedido del usuario tras reiniciar la base, unificar V1–V4 en
+      `V1__initial_schema.sql`: esquema final, restricciones y todos los datos semilla.
+- [x] Sustituir `MigrationV3IT` (backfill V2→V3) por `MigrationV1IT`: instalación desde
+      cero, versión única, nueva ejecución sin cambios, seed y exclusión GiST.
+- Validación de esta sesión: `./mvnw.cmd clean verify` pasó 45/45 pruebas (5 unitarias
+  y 40 de integración) con PostgreSQL 16 de Testcontainers. `git diff --check` y
+  enlaces locales de la documentación revisados. No se ejecutó contra Supabase.
+- Las referencias a V2/V3/V4 en los registros fechados siguientes describen el trabajo
+  histórico. Los cambios futuros se incorporan en nuevas migraciones desde V2.
 
 ## Fase 0 — Base técnica
 
@@ -407,9 +420,9 @@ funcionando y testeable — verificado por los dos caminos, no asumido.
 ## Fase 8 — Especialización completa (hacia 04/11)
 
 - [x] Resolver DP-07 (semántica temporal)
-- [x] Migración V3: restricción de exclusión GiST sobre `opportunities` — design §3.9
-- [x] `MigrationV3IT`: backfill desde esquema detenido en V2 (nombres, responsables,
-      fechas y tipo de evento) sin pérdida de datos
+- [x] Restricción de exclusión GiST (originalmente V3, consolidada en V1) sobre `opportunities` — design §3.9
+- [x] Validación histórica `MigrationV3IT`: backfill V2→V3 sin pérdida de datos.
+      Reemplazada por `MigrationV1IT` tras el reinicio de la base del 17/09.
 - [x] BE-OPP-10: validación de capacidad del salón; advertencia UI separada para >50
 - [ ] BE-OPP-11: validación de aplicación + traducción de violación GiST a `409` — design §9.3
 - [ ] Test de concurrencia con Testcontainers: dos confirmaciones simultáneas, una sola

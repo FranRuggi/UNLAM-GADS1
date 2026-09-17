@@ -126,8 +126,8 @@ Ver el detalle en [`docs/docker.md`](docs/docker.md).
 | `vendedor@ztech.local` | `Admin123!` | `SELLER` |
 | `gerente@ztech.local` | `Admin123!` | `SALES_MANAGER` |
 
-Es un usuario **semilla para desarrollo y demo**, creado por
-`V2__seed_catalogs.sql` y `V4__seed_commercial_demo.sql` — no son credenciales de
+Son usuarios **semilla para desarrollo y demo**, creados por
+`V1__initial_schema.sql` — no son credenciales de
 producción y exigen cambio de contraseña al ingresar.
 
 ## Cómo correr los tests
@@ -142,9 +142,14 @@ Surefire en `test` — es la convención estándar de Maven) levantan su propio 
 efímero con Testcontainers y corren las migraciones de Flyway desde una base vacía en
 cada ejecución. No dependen de Supabase ni de `.env`.
 
-La suite usa PostgreSQL 16 de Testcontainers y Flyway V1–V4 desde base vacía. Incluye
-el salto V2→V3 con datos legacy y verificaciones específicas del seed V4, filtros,
+La suite usa PostgreSQL 16 de Testcontainers y la migración consolidada V1 desde base
+vacía. Incluye verificaciones del esquema, datos semilla, exclusión GiST, filtros,
 actividades e historial.
+
+El 17/09/2026 se consolidaron V1–V4 en `V1__initial_schema.sql` tras el reinicio de la
+base autorizado por el usuario. Requiere una base vacía, incluido el historial
+`flyway_schema_history`; no es una actualización de bases con las versiones anteriores.
+Los cambios posteriores se incorporan en nuevas migraciones desde V2.
 
 ## Documentación de la API
 
@@ -207,5 +212,5 @@ por fase):
 - ABM administrativo de salones/servicios y de los catálogos configurables — Fase 6.
 - Alta de actividades y cierre ganado/perdido — Fase 7.
 - Confirmación ganada con traducción amigable del conflicto de reserva y prueba de
-  concurrencia — Fase 8; la restricción GiST ya existe en V3.
+  concurrencia — Fase 8; la restricción GiST ya existe en V1.
 - Deploy en Render — en curso, gestionado por el equipo.

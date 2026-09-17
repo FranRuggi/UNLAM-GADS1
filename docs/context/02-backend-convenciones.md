@@ -50,7 +50,7 @@ backend/
     │       ├── application.yml           # config base
     │       ├── application-local.yml     # perfil local
     │       ├── application-prod.yml      # perfil Render/Supabase
-    │       └── db/migration/             # V1__initial_schema.sql, V2__seed_catalogs.sql…
+    │       └── db/migration/             # V1__initial_schema.sql (esquema + semilla)
     └── test/
         └── java/com/ztech/crm/   # espeja la estructura de main
 ```

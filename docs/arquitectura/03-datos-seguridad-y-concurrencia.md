@@ -55,7 +55,7 @@ Solo una oportunidad ganada bloquea el salón. La protección tiene dos niveles:
 - El backend consulta disponibilidad para ofrecer un error comprensible.
 - PostgreSQL impide físicamente dos rangos superpuestos para el mismo `tenant_id` y salón, incluso si llegan solicitudes simultáneas.
 
-V3 implementa una restricción de exclusión GiST sobre tenant, salón y el rango
+La V1 consolidada implementa una restricción de exclusión GiST sobre tenant, salón y el rango
 `[event_start,event_end)`, filtrada por estado ganado. Los extremos contiguos no se
 superponen y los instantes se persisten en UTC. El backend traduce la violación a
 `409 Conflict`.

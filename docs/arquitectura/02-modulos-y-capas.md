@@ -93,7 +93,7 @@ backend/src/main/java/com/ztech/crm/
 Estado real al cierre de Entrega 1 (24/09), detalle fase por fase en
 `docs/specs-backend/tasks.md`.
 
-Las migraciones viven en `backend/src/main/resources/db/migration/` y siguen el patrón `V1__initial_schema.sql`, `V2__seed_catalogs.sql`.
+Las migraciones viven en `backend/src/main/resources/db/migration/` con `V1__initial_schema.sql` como instalación consolidada de esquema y datos semilla. Los cambios posteriores se versionan desde V2.
 
 ## Organización del frontend
 
